@@ -10,12 +10,12 @@ int ReadInputInteger();
 char ReadInputChar();
 int GuessGame(int &aWalletMoney);
 void ShowMoneyLeft(int aWalletMoney);
-void ShowMenue();
-int AskAmountMoney(int someMoney);
+void ShowMenu();
+int AskAmountMoney(int aWalletMoney);
 int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
 void Play(int& aWalletMoney);
-int GuessGameMenue(int& aWalletMoney);
+int GuessGameMenu(int& aWalletMoney);
 
 
 
@@ -47,7 +47,7 @@ void Play(int& aWalletMoney)
     int amountOfMoney = 0;
 
     system("cls");
-    ShowMenue();
+    ShowMenu();
     inputNr = ReadInputInteger();
 
     while (isPlaying && aWalletMoney != 0)
@@ -56,7 +56,7 @@ void Play(int& aWalletMoney)
         {
         case 1:
             system("cls");
-            inputNr = GuessGameMenue(aWalletMoney); //will return 5 
+            inputNr = GuessGameMenu(aWalletMoney); //will return 5 
             break;
         case 2:
             system("cls");
@@ -72,7 +72,7 @@ void Play(int& aWalletMoney)
             break;
         case 5:
             system("cls");
-            ShowMenue();
+            ShowMenu();
             ShowMoneyLeft(aWalletMoney);
             inputNr = ReadInputInteger();
             break;
@@ -93,7 +93,7 @@ void Play(int& aWalletMoney)
     }
 }
 
-void ShowMenue()
+void ShowMenu()
 {
     std::cout << "=== Welcome To The Kasino Game =====" << std::endl;
     std::cout << std::endl;
@@ -102,16 +102,16 @@ void ShowMenue()
     std::cout << "3. Read the rules" << std::endl;
     std::cout << "0. Exit!" << std::endl;
 }
-int AskAmountMoney(int someMoney)
+int AskAmountMoney(int aWalletMoney)
 {
-    std::cout << "How much money you want to play with? .. You Have: " << someMoney << " $" << std::endl;
+    std::cout << "How much money you want to play with? .. You Have: " << aWalletMoney << " $" << std::endl;
     int inputNr = 0;
     bool wrongInput = true;
     while (wrongInput)
     {
         std::cout << "Your Input: ";
         inputNr = ReadInputInteger();
-        if (inputNr > someMoney)
+        if (inputNr > aWalletMoney)
         {
             std::cout << "chose other amount you don't have enough money" << std::endl;
         }
@@ -119,11 +119,11 @@ int AskAmountMoney(int someMoney)
         {
             std::cout << "NOT VALID! chose other amount" << std::endl;
         }
-        else if (inputNr > 0 && inputNr <= someMoney)
+        else if (inputNr > 0 && inputNr <= aWalletMoney)
         {
             wrongInput = false;
         }
-        if (inputNr == someMoney)
+        if (inputNr == aWalletMoney)
         {
             std::cout << "Warrning you now have used all your money" << std::endl;
         }
@@ -545,7 +545,7 @@ int GuessGame(int& aWalletMoney) //change so the it take money as refrence // ch
     }//end of  while (isPlaying)
 
 }
-int GuessGameMenue(int& aWalletMoney)
+int GuessGameMenu(int& aWalletMoney)
 {
     bool isPlaying = true;
     int inputNr = 0;
