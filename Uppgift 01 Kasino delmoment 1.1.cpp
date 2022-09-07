@@ -10,7 +10,7 @@ int ReadInputInteger();
 char ReadInputChar();
 int GuessGame(int &aWalletMoney);
 void ShowMoneyLeft(int aWalletMoney);
-void ShowMenu();
+int ShowMenu(int aWalletMoney);
 int AskAmountMoney(int aWalletMoney);
 int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
@@ -46,9 +46,7 @@ void Play(int& aWalletMoney)
     bool isPlaying = true;
     int amountOfMoney = 0;
 
-    system("cls");
-    ShowMenu();
-    inputNr = ReadInputInteger();
+    inputNr = ShowMenu(aWalletMoney);
 
     while (isPlaying && aWalletMoney != 0)
     {
@@ -71,10 +69,8 @@ void Play(int& aWalletMoney)
             isPlaying = false;
             break;
         case 5:
-            system("cls");
-            ShowMenu();
-            ShowMoneyLeft(aWalletMoney);
-            inputNr = ReadInputInteger();
+            inputNr = ShowMenu(aWalletMoney);
+            
             break;
         default:
             bool wrongInput = true;
@@ -93,14 +89,21 @@ void Play(int& aWalletMoney)
     }
 }
 
-void ShowMenu()
+int ShowMenu(int aWalletMoney)
 {
+    
+    system("cls");
+
     std::cout << "=== Welcome To The Kasino Game =====" << std::endl;
     std::cout << std::endl;
     std::cout << "1. Play: guess game" << std::endl;
     std::cout << "2. Play: odd and even numbers" << std::endl;
     std::cout << "3. Read the rules" << std::endl;
     std::cout << "0. Exit!" << std::endl;
+    ShowMoneyLeft(aWalletMoney);
+    int inputNr = ReadInputInteger();
+
+    return inputNr;
 }
 int AskAmountMoney(int aWalletMoney)
 {
@@ -418,7 +421,7 @@ char ReadInputChar()
     return inputChar;
 }
 
-int GuessGame(int& aWalletMoney) //change so the it take money as refrence // change so it only allowe to guses 5 time
+int GuessGame(int& aWalletMoney)
 {
     std::uniform_int_distribution<int> rndDist(1, 6);
 
@@ -449,8 +452,6 @@ int GuessGame(int& aWalletMoney) //change so the it take money as refrence // ch
         {
             amountOfMoney = AskAmountMoney(aWalletMoney);
         }
-        //ask for how much money
-        //thr money fucntion return if valid
 
         std::cout << "I have thrown 2 dices!  ";
         std::cout << "guess the sum of the two dices ?                  sum: " << sumOfDices << std::endl;
@@ -519,6 +520,7 @@ int GuessGame(int& aWalletMoney) //change so the it take money as refrence // ch
                 }
                 else
                 {
+                    std::cout << "==================" << std::endl;
                     std::cout << "congratulatiions you guessed right" << std::endl;
                     wrongGuess = false;
 
