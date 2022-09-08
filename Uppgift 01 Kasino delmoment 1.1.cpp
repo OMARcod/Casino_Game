@@ -8,7 +8,7 @@ void GamesRules();
 int CheckExit();
 int ReadInputInteger();
 char ReadInputChar();
-int GuessGame(int &aWalletMoney);
+int GuessGame(int& aWalletMoney);
 void ShowMoneyLeft(int aWalletMoney);
 int ShowMenu(int aWalletMoney);
 int AskAmountMoney(int aWalletMoney);
@@ -54,7 +54,7 @@ void Play(int& aWalletMoney)
         {
         case 1:
             system("cls");
-            inputNr = GuessGameMenu(aWalletMoney); //will return 5 
+            inputNr = GuessGameMenu(aWalletMoney);
             break;
         case 2:
             system("cls");
@@ -63,14 +63,15 @@ void Play(int& aWalletMoney)
         case 3:
             system("cls");
             GamesRules();
-            inputNr = CheckExit(); //will return 5
+            inputNr = CheckExit(); 
             break;
         case 0:
             isPlaying = false;
             break;
+
         case 5:
             inputNr = ShowMenu(aWalletMoney);
-            
+
             break;
         default:
             bool wrongInput = true;
@@ -91,7 +92,7 @@ void Play(int& aWalletMoney)
 
 int ShowMenu(int aWalletMoney)
 {
-    
+
     system("cls");
 
     std::cout << "=== Welcome To The Kasino Game =====" << std::endl;
@@ -188,7 +189,7 @@ int PlayOddAndEven(int& aWalletMoney)
 
         while (wrongGuess)
         {
-              inputNr = ReadInputInteger();
+            inputNr = ReadInputInteger();
 
             if (inputNr == odd && dice1 == odd && dice2 == odd)
             {
@@ -360,6 +361,7 @@ void GamesRules()
 }
 int CheckExit()
 {
+    const int EXIT = 5;
     int inputNr = ReadInputInteger();
     bool wrongInput = true;
     while (wrongInput)
@@ -375,7 +377,7 @@ int CheckExit()
             break;
         }
     }
-    return 5; //return to menue
+    return EXIT; //return to menue
 }
 void ShowMoneyLeft(int aWalletMoney)
 {
@@ -435,17 +437,21 @@ int GuessGame(int& aWalletMoney)
 {
     std::uniform_int_distribution<int> rndDist(1, 6);
 
+    int const NR_OF_TRY_ALLOWED = 3;
+    int const MAX_SUM = 12;
+
+
     int dice1 = 0;
     int dice2 = 0;
     int inputNr = 0;
     int sumOfDices = 0;
-    int nrOfTry = 3;
-
+    int nrOfTry = NR_OF_TRY_ALLOWED;
+    const int EXIT = 5;
     bool wrongGuess = true;
     bool isPlaying = true;
 
     int amountOfMoney = 0;
-    
+
     std::cout << "======================OBS======================" << std::endl;
     std::cout << "if the sum of the two dice is not equal your answer you will lose" << std::endl;
     std::cout << "if you the sum is equal then you get 2x the money you put" << std::endl;
@@ -471,9 +477,9 @@ int GuessGame(int& aWalletMoney)
         while (wrongGuess)
         {
             inputNr = ReadInputInteger();
-            if (inputNr > 12)
+            if (inputNr > MAX_SUM)
             {
-                std::cout << "The number can't be bigger than 12!" << std::endl;
+                std::cout << "The number can't be bigger than " << MAX_SUM << std::endl;
                 std::cout << "Your Input: ";
 
             }
@@ -481,6 +487,8 @@ int GuessGame(int& aWalletMoney)
             {
                 if (nrOfTry <= 0)
                 {
+                    system("cls");
+
                     int lossMoney = amountOfMoney;
                     aWalletMoney -= lossMoney;
                     ShowMoneyLeft(aWalletMoney);
@@ -489,7 +497,7 @@ int GuessGame(int& aWalletMoney)
                     if (aWalletMoney == 0)
                     {
                         isPlaying = false;
-                        return 5; //exit to the menue
+                        return EXIT; //exit to the menue
                     }
                     else
                     {
@@ -499,21 +507,21 @@ int GuessGame(int& aWalletMoney)
                         if (ReadInputChar() == 'n')
                         {
                             isPlaying = false;
-                            return 5; //exit to the menue
+                            return EXIT; //exit to the menue
                         }
                         else
                         {
-                            nrOfTry = 3;
+                            nrOfTry = NR_OF_TRY_ALLOWED;
                             system("cls");
                         }
                     }
-                   
+
                 }
                 if (inputNr > sumOfDices)
                 {
                     nrOfTry--;
 
-                    std::cout << "=================="<< std::endl;
+                    std::cout << "==================" << std::endl;
                     std::cout << "less" << "                           ||Try left:" << nrOfTry << std::endl;
 
                     std::cout << "Your Input: ";
@@ -530,6 +538,7 @@ int GuessGame(int& aWalletMoney)
                 }
                 else
                 {
+                    system("cls");
                     std::cout << "==================" << std::endl;
                     std::cout << "congratulatiions you guessed right" << std::endl;
                     wrongGuess = false;
@@ -543,15 +552,15 @@ int GuessGame(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return 5; //exit to the menue
+                        return EXIT; //exit to the menue
                     }
                     else
                     {
-                        nrOfTry = 3;
+                        nrOfTry = NR_OF_TRY_ALLOWED;
                         system("cls");
                     }
                 }
-                
+
             } //end of if (inputNr > 12)
         }//end of while (wrongGuess)
     }//end of  while (isPlaying)
@@ -561,6 +570,8 @@ int GuessGameMenu(int& aWalletMoney)
 {
     bool isPlaying = true;
     int inputNr = 0;
+    int const MENU = 5;
+    int const EXIT = 5;
 
     while (isPlaying && aWalletMoney != 0)
     {
@@ -588,7 +599,8 @@ int GuessGameMenu(int& aWalletMoney)
         case 0:
             isPlaying = false;
             break;
-        case 5:
+
+        case MENU:
             system("cls");
             std::cout << "==== Guess Game ====" << std::endl;
             std::cout << std::endl;
@@ -612,5 +624,5 @@ int GuessGameMenu(int& aWalletMoney)
             break;
         }
     }
-    return 5;
+    return EXIT;
 }
