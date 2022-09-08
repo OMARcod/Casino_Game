@@ -45,7 +45,7 @@ void Play(int& aWalletMoney)
     bool okInput = true;
     bool isPlaying = true;
     int amountOfMoney = 0;
-
+    int choiceOne = 1, choiceTwo = 2, choiceThree = 3, choiceZero = 0;
     inputNr = ShowMenu(aWalletMoney);
 
     while (isPlaying && aWalletMoney != 0)
@@ -78,7 +78,7 @@ void Play(int& aWalletMoney)
             {
                 std::cout << "pleas chose one of the option" << std::endl;
                 inputNr = ReadInputInteger();
-                if (inputNr == 0 || inputNr == 1 || inputNr == 2 || inputNr == 3)
+                if (inputNr == choiceZero || inputNr == choiceOne || inputNr == choiceTwo || inputNr == choiceThree)
                 {
                     wrongInput = false;
                 }
@@ -166,7 +166,8 @@ int PlayOddAndEven(int& aWalletMoney)
         std::cout << "dice1:  " << dice1 << "  ||   dice2: " << dice2 << "   this message to me!\n" << std::endl;
         dice1 = (dice1 % 2);
         dice2 = (dice2 % 2);
-
+        int even = 0;
+        int odd = 1;
 
         if (aWalletMoney > 0)
         {
@@ -179,7 +180,7 @@ int PlayOddAndEven(int& aWalletMoney)
         std::cout << "What do want to chose? odd or even" << std::endl;
         std::cout << std::endl;
         std::cout << "1. odd" << std::endl;
-        std::cout << "2. even" << std::endl;
+        std::cout << "0. even" << std::endl;
         std::cout << "=======================================" << std::endl;
 
         std::cout << "Your Input: ";
@@ -187,19 +188,21 @@ int PlayOddAndEven(int& aWalletMoney)
 
         while (wrongGuess)
         {
-            inputNr = ReadInputInteger();
+              inputNr = ReadInputInteger();
 
-            if (inputNr == 1 && dice1 == 1 && dice2 == 1)
+            if (inputNr == odd && dice1 == odd && dice2 == odd)
             {
+                system("cls");
+                //add the win money to the wallet
+                int winMoney = (amountOfMoney * 3);
+                aWalletMoney += winMoney;
+                ShowMoneyLeft(aWalletMoney);
+
                 std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
 
                 std::cout << "congratulatiions you guessed right" << std::endl;
                 wrongGuess = false;
 
-                //add the win money to the wallet
-                int winMoney = (amountOfMoney * 3);
-                aWalletMoney += winMoney;
-                ShowMoneyLeft(aWalletMoney);
 
 
                 std::cout << "Do you want to play one more time ? y/n" << std::endl;
@@ -215,18 +218,20 @@ int PlayOddAndEven(int& aWalletMoney)
                     system("cls");
                 }
             }
-            else if (inputNr == 2 && dice1 == 0 && dice2 == 0)
+            else if (inputNr == even && dice1 == even && dice2 == even)
             {
-                std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
-
-
-                std::cout << "congratulatiions you guessed right" << std::endl;
-                wrongGuess = false;
+                system("cls");
 
                 //add the win money to the wallet
                 int winMoney = (amountOfMoney * 3);
                 aWalletMoney += winMoney;
                 ShowMoneyLeft(aWalletMoney);
+
+                std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
+
+
+                std::cout << "congratulatiions you guessed right" << std::endl;
+                wrongGuess = false;
 
 
                 std::cout << "Do you want to play one more time ? y/n" << std::endl;
@@ -235,16 +240,17 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return 5; //exit to the menue
+                    return 5; //exit to the menu
                 }
                 else
                 {
                     system("cls");
                 }
             }
-            else
+            else if (inputNr == odd || inputNr == even)
             {
-                //wrong
+                system("cls");
+
                 int lossMoney = amountOfMoney;
                 aWalletMoney -= lossMoney;
                 ShowMoneyLeft(aWalletMoney);
@@ -253,7 +259,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (aWalletMoney == 0)
                 {
                     isPlaying = false;
-                    return 5; //exit to the menue
+                    return 5; //exit to the menu
                 }
                 else
                 {
@@ -265,13 +271,17 @@ int PlayOddAndEven(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return 5; //exit to the menue
+                        return 5; //exit to the menu
                     }
                     else
                     {
                         system("cls");
                     }
                 }
+            }
+            else
+            {
+                std::cout << "Please Enter 1. even or 0. odd " << std::endl;
             }
 
 
