@@ -16,6 +16,8 @@ int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
 void Play(int& aWalletMoney);
 int GuessGameMenu(int& aWalletMoney);
+void MoneyMath(int& aWalletMoney, int amountOfMoney);
+
 enum class Instructions
 {
     Exit = 5,
@@ -109,6 +111,7 @@ int ShowMenu(int aWalletMoney)
 
     return inputNr;
 }
+
 int AskAmountMoney(int aWalletMoney)
 {
     std::cout << "How much money you want to play with? .. You Have: " << aWalletMoney << " $" << std::endl;
@@ -196,10 +199,8 @@ int PlayOddAndEven(int& aWalletMoney)
             if (inputNr == odd && dice1 == odd && dice2 == odd)
             {
                 system("cls");
-                //add the win money to the wallet
-                int winMoney = (amountOfMoney * 3);
-                aWalletMoney += winMoney;
-                ShowMoneyLeft(aWalletMoney);
+
+                MoneyMath(aWalletMoney, amountOfMoney * 3);
 
                 std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
 
@@ -214,7 +215,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit); //exit to the menue
+                    return static_cast<int>(Instructions::Exit); 
                 }
                 else
                 {
@@ -225,10 +226,9 @@ int PlayOddAndEven(int& aWalletMoney)
             {
                 system("cls");
 
-                //add the win money to the wallet
-                int winMoney = (amountOfMoney * 3);
-                aWalletMoney += winMoney;
-                ShowMoneyLeft(aWalletMoney);
+                
+                MoneyMath(aWalletMoney, amountOfMoney * 3);
+
 
                 std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
 
@@ -243,7 +243,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit); //exit to the menu
+                    return static_cast<int>(Instructions::Exit);
                 }
                 else
                 {
@@ -254,15 +254,16 @@ int PlayOddAndEven(int& aWalletMoney)
             {
                 system("cls");
 
-                int lossMoney = amountOfMoney;
-                aWalletMoney -= lossMoney;
-                ShowMoneyLeft(aWalletMoney);
+                MoneyMath(aWalletMoney, -amountOfMoney);
+
+
+
                 wrongGuess = false;
 
                 if (aWalletMoney == 0)
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit); //exit to the menu
+                    return static_cast<int>(Instructions::Exit); 
                 }
                 else
                 {
@@ -274,7 +275,7 @@ int PlayOddAndEven(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return static_cast<int>(Instructions::Exit); //exit to the menu
+                        return static_cast<int>(Instructions::Exit);
                     }
                     else
                     {
@@ -288,11 +289,18 @@ int PlayOddAndEven(int& aWalletMoney)
             }
 
 
-        }//end of while (wrongGuess)
+        }
 
 
     }
 }
+
+void MoneyMath(int &aWalletMoney,int amountOfMoney)
+{
+    aWalletMoney += amountOfMoney;
+    ShowMoneyLeft(aWalletMoney);
+}
+
 int OddAndEvenGameMenu(int& aWalletMoney)
 {
     bool isPlaying = true;
@@ -350,6 +358,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
     }
     return static_cast<int>(Instructions::Exit);
 }
+
 void GamesRules()
 {
     std::cout << "==== The Rules =====" << std::endl;
@@ -361,6 +370,7 @@ void GamesRules()
     std::cout << ">> Good luck .. Exit to go back to the menu" << std::endl;
     std::cout << "0. Exit!" << std::endl;
 }
+
 int CheckExit()
 {
     int inputNr = ReadInputInteger();
@@ -378,8 +388,9 @@ int CheckExit()
             break;
         }
     }
-    return static_cast<int>(Instructions::Exit); //return to menue
+    return static_cast<int>(Instructions::Exit);
 }
+
 void ShowMoneyLeft(int aWalletMoney)
 {
 
@@ -387,6 +398,7 @@ void ShowMoneyLeft(int aWalletMoney)
     std::cout << "Money left: " << aWalletMoney << std::endl;
     std::cout << "====================" << std::endl;
 }
+
 int ReadInputInteger()
 {
     bool okInput = true;
@@ -412,6 +424,7 @@ int ReadInputInteger()
     }
     return inputNr;
 }
+
 char ReadInputChar()
 {
     bool okInput = true;
@@ -489,9 +502,8 @@ int GuessGame(int& aWalletMoney)
                 {
                     system("cls");
 
-                    int lossMoney = amountOfMoney;
-                    aWalletMoney -= lossMoney;
-                    ShowMoneyLeft(aWalletMoney);
+                    MoneyMath(aWalletMoney, -amountOfMoney);
+
                     wrongGuess = false;
 
                     if (aWalletMoney == 0)
@@ -543,9 +555,8 @@ int GuessGame(int& aWalletMoney)
                     std::cout << "congratulatiions you guessed right" << std::endl;
                     wrongGuess = false;
 
-                    int winMoney = (amountOfMoney * 2);
-                    aWalletMoney += winMoney;
-                    ShowMoneyLeft(aWalletMoney);
+                    MoneyMath(aWalletMoney, amountOfMoney * 2);
+
 
                     std::cout << "Do you want to play one more time ? y/n" << std::endl;
 
@@ -560,12 +571,12 @@ int GuessGame(int& aWalletMoney)
                         system("cls");
                     }
                 }
-
-            } //end of if (inputNr > 12)
-        }//end of while (wrongGuess)
-    }//end of  while (isPlaying)
+            } 
+        }
+    }
 
 }
+
 int GuessGameMenu(int& aWalletMoney)
 {
     bool isPlaying = true;
