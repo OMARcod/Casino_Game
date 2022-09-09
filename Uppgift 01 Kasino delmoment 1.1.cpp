@@ -8,17 +8,17 @@ void GamesRules();
 int CheckExit();
 int ReadInputInteger();
 char ReadInputChar();
-int GuessGame(int& aWalletMoney);
 void ShowMoneyLeft(int aWalletMoney);
 int ShowMenu(int aWalletMoney);
 int AskAmountMoney(int aWalletMoney);
 int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
 void Play(int& aWalletMoney);
+int GuessGame(int& aWalletMoney);
 int GuessGameMenu(int& aWalletMoney);
-void MoneyMath(int& aWalletMoney, int amountOfMoney);
+void MoneyMath(int& aWalletMoney, int someAmountOfMoney);
 
-enum class Instructions
+enum class Instruction
 {
     Exit = 5,
 };
@@ -215,7 +215,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit); 
+                    return static_cast<int>(Instruction::Exit); 
                 }
                 else
                 {
@@ -243,7 +243,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit);
+                    return static_cast<int>(Instruction::Exit);
                 }
                 else
                 {
@@ -263,7 +263,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (aWalletMoney == 0)
                 {
                     isPlaying = false;
-                    return static_cast<int>(Instructions::Exit); 
+                    return static_cast<int>(Instruction::Exit); 
                 }
                 else
                 {
@@ -275,7 +275,7 @@ int PlayOddAndEven(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return static_cast<int>(Instructions::Exit);
+                        return static_cast<int>(Instruction::Exit);
                     }
                     else
                     {
@@ -295,9 +295,9 @@ int PlayOddAndEven(int& aWalletMoney)
     }
 }
 
-void MoneyMath(int &aWalletMoney,int amountOfMoney)
+void MoneyMath(int &aWalletMoney,int someAmountOfMoney)
 {
-    aWalletMoney += amountOfMoney;
+    aWalletMoney += someAmountOfMoney;
     ShowMoneyLeft(aWalletMoney);
 }
 
@@ -356,7 +356,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
             break;
         }
     }
-    return static_cast<int>(Instructions::Exit);
+    return static_cast<int>(Instruction::Exit);
 }
 
 void GamesRules()
@@ -388,7 +388,7 @@ int CheckExit()
             break;
         }
     }
-    return static_cast<int>(Instructions::Exit);
+    return static_cast<int>(Instruction::Exit);
 }
 
 void ShowMoneyLeft(int aWalletMoney)
@@ -407,7 +407,6 @@ int ReadInputInteger()
     while (okInput)
     {
         std::cin >> inputNr;
-
 
         if (std::cin.fail())
         {
@@ -429,7 +428,6 @@ char ReadInputChar()
 {
     bool okInput = true;
     char inputChar = 'e';
-
 
     while (okInput)
     {
@@ -509,7 +507,7 @@ int GuessGame(int& aWalletMoney)
                     if (aWalletMoney == 0)
                     {
                         isPlaying = false;
-                        return static_cast<int>(Instructions::Exit); //exit to the menue
+                        return static_cast<int>(Instruction::Exit);
                     }
                     else
                     {
@@ -519,7 +517,7 @@ int GuessGame(int& aWalletMoney)
                         if (ReadInputChar() == 'n')
                         {
                             isPlaying = false;
-                            return static_cast<int>(Instructions::Exit); //exit to the menue
+                            return static_cast<int>(Instruction::Exit);
                         }
                         else
                         {
@@ -563,7 +561,7 @@ int GuessGame(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return static_cast<int>(Instructions::Exit); //exit to the menue
+                        return static_cast<int>(Instruction::Exit);
                     }
                     else
                     {
@@ -633,5 +631,5 @@ int GuessGameMenu(int& aWalletMoney)
             break;
         }
     }
-    return static_cast<int>(Instructions::Exit);
+    return static_cast<int>(Instruction::Exit);
 }
