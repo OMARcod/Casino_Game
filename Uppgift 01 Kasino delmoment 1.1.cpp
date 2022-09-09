@@ -16,7 +16,10 @@ int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
 void Play(int& aWalletMoney);
 int GuessGameMenu(int& aWalletMoney);
-
+enum class Instructions
+{
+    Exit = 5,
+};
 
 
 int main()
@@ -164,7 +167,6 @@ int PlayOddAndEven(int& aWalletMoney)
 
         int tempDice1 = dice1;
         int tempDice2 = dice2;
-        std::cout << "dice1:  " << dice1 << "  ||   dice2: " << dice2 << "   this message to me!\n" << std::endl;
         dice1 = (dice1 % 2);
         dice2 = (dice2 % 2);
         int even = 0;
@@ -212,7 +214,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return 5; //exit to the menue
+                    return static_cast<int>(Instructions::Exit); //exit to the menue
                 }
                 else
                 {
@@ -241,7 +243,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (ReadInputChar() == 'n')
                 {
                     isPlaying = false;
-                    return 5; //exit to the menu
+                    return static_cast<int>(Instructions::Exit); //exit to the menu
                 }
                 else
                 {
@@ -260,7 +262,7 @@ int PlayOddAndEven(int& aWalletMoney)
                 if (aWalletMoney == 0)
                 {
                     isPlaying = false;
-                    return 5; //exit to the menu
+                    return static_cast<int>(Instructions::Exit); //exit to the menu
                 }
                 else
                 {
@@ -272,7 +274,7 @@ int PlayOddAndEven(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return 5; //exit to the menu
+                        return static_cast<int>(Instructions::Exit); //exit to the menu
                     }
                     else
                     {
@@ -346,7 +348,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
             break;
         }
     }
-    return 5;
+    return static_cast<int>(Instructions::Exit);
 }
 void GamesRules()
 {
@@ -361,7 +363,6 @@ void GamesRules()
 }
 int CheckExit()
 {
-    const int EXIT = 5;
     int inputNr = ReadInputInteger();
     bool wrongInput = true;
     while (wrongInput)
@@ -377,7 +378,7 @@ int CheckExit()
             break;
         }
     }
-    return EXIT; //return to menue
+    return static_cast<int>(Instructions::Exit); //return to menue
 }
 void ShowMoneyLeft(int aWalletMoney)
 {
@@ -437,16 +438,15 @@ int GuessGame(int& aWalletMoney)
 {
     std::uniform_int_distribution<int> rndDist(1, 6);
 
-    int const NR_OF_TRY_ALLOWED = 3;
-    int const MAX_SUM = 12;
+    int const nrOfTryAllowed = 3;
+    int const maxSum = 12;
 
 
     int dice1 = 0;
     int dice2 = 0;
     int inputNr = 0;
     int sumOfDices = 0;
-    int nrOfTry = NR_OF_TRY_ALLOWED;
-    const int EXIT = 5;
+    int nrOfTry = nrOfTryAllowed;
     bool wrongGuess = true;
     bool isPlaying = true;
 
@@ -470,16 +470,16 @@ int GuessGame(int& aWalletMoney)
         }
 
         std::cout << "I have thrown 2 dices!  ";
-        std::cout << "guess the sum of the two dices ?                  sum: " << sumOfDices << std::endl;
+        std::cout << "guess the sum of the two dices ? "<< std::endl;
 
         std::cout << "Your Input: ";
 
         while (wrongGuess)
         {
             inputNr = ReadInputInteger();
-            if (inputNr > MAX_SUM)
+            if (inputNr > maxSum)
             {
-                std::cout << "The number can't be bigger than " << MAX_SUM << std::endl;
+                std::cout << "The number can't be bigger than " << maxSum << std::endl;
                 std::cout << "Your Input: ";
 
             }
@@ -497,7 +497,7 @@ int GuessGame(int& aWalletMoney)
                     if (aWalletMoney == 0)
                     {
                         isPlaying = false;
-                        return EXIT; //exit to the menue
+                        return static_cast<int>(Instructions::Exit); //exit to the menue
                     }
                     else
                     {
@@ -507,11 +507,11 @@ int GuessGame(int& aWalletMoney)
                         if (ReadInputChar() == 'n')
                         {
                             isPlaying = false;
-                            return EXIT; //exit to the menue
+                            return static_cast<int>(Instructions::Exit); //exit to the menue
                         }
                         else
                         {
-                            nrOfTry = NR_OF_TRY_ALLOWED;
+                            nrOfTry = nrOfTryAllowed;
                             system("cls");
                         }
                     }
@@ -552,11 +552,11 @@ int GuessGame(int& aWalletMoney)
                     if (ReadInputChar() == 'n')
                     {
                         isPlaying = false;
-                        return EXIT; //exit to the menue
+                        return static_cast<int>(Instructions::Exit); //exit to the menue
                     }
                     else
                     {
-                        nrOfTry = NR_OF_TRY_ALLOWED;
+                        nrOfTry = nrOfTryAllowed;
                         system("cls");
                     }
                 }
@@ -570,8 +570,6 @@ int GuessGameMenu(int& aWalletMoney)
 {
     bool isPlaying = true;
     int inputNr = 0;
-    int const MENU = 5;
-    int const EXIT = 5;
 
     while (isPlaying && aWalletMoney != 0)
     {
@@ -600,7 +598,7 @@ int GuessGameMenu(int& aWalletMoney)
             isPlaying = false;
             break;
 
-        case MENU:
+        case 5:
             system("cls");
             std::cout << "==== Guess Game ====" << std::endl;
             std::cout << std::endl;
@@ -624,5 +622,5 @@ int GuessGameMenu(int& aWalletMoney)
             break;
         }
     }
-    return EXIT;
+    return static_cast<int>(Instructions::Exit);
 }
