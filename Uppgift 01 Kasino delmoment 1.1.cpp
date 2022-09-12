@@ -346,6 +346,7 @@ int PlayOddAndEven(int& aWalletMoney)
 
 
 	}
+	return static_cast<int>(Instruction::Exit);
 }
 
 int OddAndEvenGameMenu(int& aWalletMoney)
@@ -511,7 +512,7 @@ void GamesRules()
 void showAmountOfWin(const int& aWinMoney)
 {
 	std::cout << "=====================================" << std::endl;
-	std::cout << "amount of win " << locWinMoneyGuess << "$" << std::endl;
+	std::cout << "amount of win " << aWinMoney << "$" << std::endl;
 	std::cout << "=====================================" << std::endl;
 }
 
