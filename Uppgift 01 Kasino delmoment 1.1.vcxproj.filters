@@ -18,11 +18,5 @@
     <ClCompile Include="Uppgift 01 Kasino delmoment 1.1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ticta.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
