@@ -9,7 +9,7 @@ int CheckExit();
 int ReadInputInteger();
 char ReadInputChar();
 void ShowMoneyLeft(int aWalletMoney);
-int ShowMenu(int aWalletMoney);
+int ShowMainMenu(int aWalletMoney);
 int AskAmountMoney(int aWalletMoney);
 int PlayOddAndEven(int& aWalletMoney);
 int OddAndEvenGameMenu(int& aWalletMoney);
@@ -27,15 +27,6 @@ void SubtractFromWinMoney(int aWinMoney, const int& amountToSubtract);
 void ShowAmountOfWin(const int& aWinMoney);
 void DisplayWinLose();
 
-
-static const int locMaxMoney = 5000;
-static int locWinMoneyGuess = 0;
-static int locWinMoneyOddEven = 0;
-static int locMaxWinMoneyGameThree = 0;
-
-static const int arraySize = 5;
-int historyWin[arraySize] = { 0 };
-
 //TicTacToe
 void ChangeArray(char a[][3], char letter);
 void ChangeArrayAtLocation(char a[][3], char letter, int index, int player);
@@ -50,14 +41,21 @@ bool CheckHorisontalWin();
 bool CheckVerticalWin();
 bool CheckCurvedLineWin();
 bool CheckThisRow(int beginIndex, int player, int toAdd);
-void ShowMenu();
+void TicTacShowMenu();
 void ResetTheGame(char array[][3]);
 int RandomIndex();
 int EasyEnemi();
 int RandomNumber(int aMin, int aMax);
 int RandomIndex();
 int returnEmptyIndex();
-int PlayTicTacToe();
+int PlayTicTacToe(int& aWalletMoney);
+
+static const int locMaxMoney = 5000;
+static int locTotalWinMoneyGuess = 0;
+static int locTotalWinMoneyOddEven = 0;
+static int locTotalWinMoneyTicTac = 0;
+static const int arraySize = 5;
+int historyWin[arraySize] = { 0 };
 
 static int const arraySizeSpace = 9;
 static int usedSpace[arraySizeSpace]{ 0 };
@@ -105,7 +103,7 @@ void Play(int& aWalletMoney)
 	bool isPlaying = true;
 	int amountOfMoney = 0;
 	int choiceOne = 1, choiceTwo = 2, choiceThree = 3, choiceZero = 0;
-	inputNr = ShowMenu(aWalletMoney);
+	inputNr = ShowMainMenu(aWalletMoney);
 
 	while (isPlaying && aWalletMoney != 0)
 	{
@@ -122,7 +120,7 @@ void Play(int& aWalletMoney)
 		case 3:
 			system("cls");
 			GamesRules();
-			inputNr = PlayTicTacToe();
+			inputNr = PlayTicTacToe(aWalletMoney);
 			break;
 		case 4:
 			system("cls");
@@ -134,7 +132,7 @@ void Play(int& aWalletMoney)
 			break;
 
 		case 5:
-			inputNr = ShowMenu(aWalletMoney);
+			inputNr = ShowMainMenu(aWalletMoney);
 
 			break;
 		default:
@@ -154,7 +152,7 @@ void Play(int& aWalletMoney)
 	}
 }
 
-int ShowMenu(int aWalletMoney)
+int ShowMainMenu(int aWalletMoney)
 {
 
 	system("cls");
@@ -258,7 +256,7 @@ int PlayOddAndEven(int& aWalletMoney)
 			amountOfMoney = AskAmountMoney(aWalletMoney);
 
 		}
-		ShowAmountOfWin(locWinMoneyOddEven);
+		ShowAmountOfWin(locTotalWinMoneyOddEven);
 		std::cout << "I have thrown 2 dices!  ";
 		std::cout << "What do want to chose? odd or even" << std::endl;
 		std::cout << std::endl;
@@ -279,9 +277,9 @@ int PlayOddAndEven(int& aWalletMoney)
 				system("cls");
 
 				MoneyMath(aWalletMoney, amountOfMoney * 3);
-				locWinMoneyOddEven += amountOfMoney * 3;
+				locTotalWinMoneyOddEven += amountOfMoney * 3;
 
-				if (CheckIfReachMaxWinMoney(locWinMoneyOddEven))
+				if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
 				{
 					DisplayYouCantPlay();
 					isPlaying = false;
@@ -314,9 +312,9 @@ int PlayOddAndEven(int& aWalletMoney)
 
 
 				MoneyMath(aWalletMoney, amountOfMoney * 3);
-				locWinMoneyOddEven += amountOfMoney * 3;
+				locTotalWinMoneyOddEven += amountOfMoney * 3;
 
-				if (CheckIfReachMaxWinMoney(locWinMoneyOddEven))
+				if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
 				{
 					DisplayYouCantPlay();
 					isPlaying = false;
@@ -352,7 +350,7 @@ int PlayOddAndEven(int& aWalletMoney)
 				system("cls");
 
 				MoneyMath(aWalletMoney, -amountOfMoney);
-				SubtractFromWinMoney(locWinMoneyOddEven, amountOfMoney);
+				SubtractFromWinMoney(locTotalWinMoneyOddEven, amountOfMoney);
 
 
 				wrongGuess = false;
@@ -365,7 +363,6 @@ int PlayOddAndEven(int& aWalletMoney)
 				else
 				{
 					std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
-
 					std::cout << "you have lost!" << std::endl;
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
 					StorWinGame(lose);
@@ -386,11 +383,7 @@ int PlayOddAndEven(int& aWalletMoney)
 			{
 				std::cout << "Please Enter 1. even or 0. odd " << std::endl;
 			}
-
-
 		}
-
-
 	}
 	return static_cast<int>(Instruction::Exit);
 }
@@ -408,7 +401,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
 		std::cout << "1. Play" << std::endl;
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
-		ShowAmountOfWin(locWinMoneyOddEven);
+		ShowAmountOfWin(locTotalWinMoneyOddEven);
 
 
 		inputNr = ReadInputInteger();
@@ -416,7 +409,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
 		switch (inputNr)
 		{
 		case 1:
-			if (CheckIfReachMaxWinMoney(locWinMoneyOddEven))
+			if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
 			{
 				DisplayYouCantPlay();
 			}
@@ -566,11 +559,11 @@ void SubtractFromWinMoney(int aWinMoney, const int& amountToSubtract)
 {
 	if (aWinMoney > amountToSubtract)
 	{
-		locWinMoneyGuess -= amountToSubtract;
+		locTotalWinMoneyGuess -= amountToSubtract;
 	}
 	else
 	{
-		locWinMoneyGuess = 0;
+		locTotalWinMoneyGuess = 0;
 	}
 }
 
@@ -620,7 +613,7 @@ int GuessGame(int& aWalletMoney)
 		{
 			amountOfMoney = AskAmountMoney(aWalletMoney);
 		}
-		ShowAmountOfWin(locWinMoneyGuess);
+		ShowAmountOfWin(locTotalWinMoneyGuess);
 		std::cout << "guess the sum of the two dices ? \t\t" << sumOfDices << std::endl;
 
 		std::cout << "Your Input: ";
@@ -649,7 +642,7 @@ int GuessGame(int& aWalletMoney)
 
 					MoneyMath(aWalletMoney, -amountOfMoney);
 
-					SubtractFromWinMoney(locWinMoneyGuess, amountOfMoney);
+					SubtractFromWinMoney(locTotalWinMoneyGuess, amountOfMoney);
 
 					wrongGuess = false;
 
@@ -663,7 +656,7 @@ int GuessGame(int& aWalletMoney)
 						std::cout << "you have lost!" << std::endl;
 						StorWinGame(lose);
 
-						if (CheckIfReachMaxWinMoney(locWinMoneyGuess))
+						if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
 						{
 							DisplayYouCantPlay();
 							isPlaying = false;
@@ -720,9 +713,9 @@ int GuessGame(int& aWalletMoney)
 					StorWinGame(win);
 
 					MoneyMath(aWalletMoney, amountOfMoney * 2);
-					locWinMoneyGuess += amountOfMoney * 2;
+					locTotalWinMoneyGuess += amountOfMoney * 2;
 
-					if (CheckIfReachMaxWinMoney(locWinMoneyGuess))
+					if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
 					{
 						DisplayYouCantPlay();
 						isPlaying = false;
@@ -765,14 +758,14 @@ int GuessGameMenu(int& aWalletMoney)
 		std::cout << "1. Play" << std::endl;
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
-		ShowAmountOfWin(locWinMoneyGuess);
+		ShowAmountOfWin(locTotalWinMoneyGuess);
 
 		inputNr = ReadInputInteger();
 
 		switch (inputNr)
 		{
 		case 1:
-			if (CheckIfReachMaxWinMoney(locWinMoneyGuess))
+			if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
 			{
 				DisplayYouCantPlay();
 			}
@@ -859,7 +852,7 @@ void StorWinGame(bool isWin)
 		//if is full
 		//stor the make the fist element emepty
 		//push the rest to one element to the right
-		
+
 		int temp = 0;
 		for (int i = 4; i > 0; i--)
 		{
@@ -901,7 +894,7 @@ void DisplayWinLose()
 
 //TicTacToe
 
-int PlayTicTacToe()
+int PlayTicTacToe(int& aWalletMoney)
 {
 	const int row = 3, column = 3;
 	char array2D[3][3];
@@ -910,123 +903,156 @@ int PlayTicTacToe()
 
 	bool isPlaying = true;
 	bool firstPlayer = true;
-	ShowMenu();
+	TicTacShowMenu();
 	index = AskForInputMenu();
 
 	std::string player1 = "";
 	std::string player2 = "";
 
-	bool GameNotExit = true;
 
-	if (index == 0)
+	//New Things
+	int amountOfMoney = 0;
+
+
+	while (aWalletMoney != 0)
 	{
-		GameNotExit = false;
-	}
-	else
-	{
-		system("cls");
-		std::cout << "First Player Name: ";
-		std::cin >> player1;
+		bool GameNotExit = true;
 
-
-		system("cls");
-		ChangeArray(array2D, ' ');
-		DipslayArray(array2D);
-		std::cout << "Type the the number of the box that you want to use:" << std::endl;
-	}
-	bool wantToPlay = true;
-
-	while (GameNotExit)
-	{
-		while (wantToPlay)
-		{
-			while (isPlaying)
-			{
-				if (firstPlayer)
-				{
-					index = AskForInputGame(player1);
-				}
-				else
-				{
-					index = returnEmptyIndex();
-				}
-				if (CheckIndexIsUsed(index))
-				{
-					std::cout << index << ": box is used! Pleas chose another box" << std::endl;
-				}
-				else
-				{
-					if (firstPlayer)
-					{
-						ChangeArrayAtLocation(array2D, 'X', index, static_cast<int>(Player::X));
-						firstPlayer = false;
-					}
-					else
-					{
-						ChangeArrayAtLocation(array2D, 'O', index, static_cast<int>(Player::O));
-						firstPlayer = true;
-					}
-					DipslayArray(array2D);
-				}
-				if (CheckIfWin())
-				{
-					if (firstPlayer)
-					{
-						std::cout << "the comp have Won!" << std::endl;
-						isPlaying = false;
-					}
-					else
-					{
-						std::cout << player2 << " You Won!" << std::endl;
-						isPlaying = false;
-					}
-				}
-				else if (CheckIfFull())
-				{
-					std::cout << "The box is full" << std::endl;
-					isPlaying = false;
-				}
-			}
-
-			std::cout << "==========================" << std::endl;
-			std::cout << "Do you want to play again?" << std::endl;
-			std::cout << "1. Yes" << std::endl;
-			std::cout << "0. No!" << std::endl;
-			if (AskForInputMenu() == 0)
-			{
-				wantToPlay = false;
-				ResetTheGame(array2D);
-			}
-			else
-			{
-				isPlaying = true;
-				ResetTheGame(array2D);
-			}
-		}
-
-		ShowMenu();
-		index = AskForInputMenu();
 		if (index == 0)
 		{
 			GameNotExit = false;
 		}
 		else
 		{
-			wantToPlay = true;
-			isPlaying = true;
 			system("cls");
+
+			if (aWalletMoney > 0) //New
+			{
+
+				amountOfMoney = AskAmountMoney(aWalletMoney); //New
+
+			}
+			ShowAmountOfWin(locTotalWinMoneyTicTac); //New
+
 			std::cout << "First Player Name: ";
 			std::cin >> player1;
-			std::cout << "Secund Player Name: ";
-			std::cin >> player2;
 
 			system("cls");
 			ChangeArray(array2D, ' ');
 			DipslayArray(array2D);
 			std::cout << "Type the the number of the box that you want to use:" << std::endl;
 		}
-	}
+		bool wantToPlay = true;
 
+		while (GameNotExit)
+		{
+			while (wantToPlay)
+			{
+				while (isPlaying)
+				{
+					if (firstPlayer)
+					{
+						index = AskForInputGame(player1);
+					}
+					else
+					{
+						index = returnEmptyIndex();
+					}
+					if (CheckIndexIsUsed(index))
+					{
+						std::cout << index << ": box is used! Pleas chose another box" << std::endl;
+					}
+					else
+					{
+						if (firstPlayer)
+						{
+							ChangeArrayAtLocation(array2D, 'X', index, static_cast<int>(Player::X));
+							firstPlayer = false;
+						}
+						else
+						{
+							ChangeArrayAtLocation(array2D, 'O', index, static_cast<int>(Player::O));
+							firstPlayer = true;
+						}
+						DipslayArray(array2D);
+					}
+					if (CheckIfWin())
+					{
+						if (firstPlayer)
+						{
+							MoneyMath(aWalletMoney, -amountOfMoney); //New
+							SubtractFromWinMoney(locTotalWinMoneyTicTac, amountOfMoney); //New
+
+							std::cout << "the comp have Won!" << std::endl;
+							isPlaying = false;
+						}
+						else
+						{
+							MoneyMath(aWalletMoney, amountOfMoney * 3); //New
+							locTotalWinMoneyTicTac += amountOfMoney * 3; //New
+
+
+							std::cout << player2 << " You Won!" << std::endl;
+							isPlaying = false;
+						}
+					}
+					else if (CheckIfFull())
+					{
+						std::cout << "The box is full" << std::endl;
+						isPlaying = false;
+					}
+				}
+
+				if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac))  //New
+				{
+					DisplayYouCantPlay();
+					wantToPlay = false;
+					ResetTheGame(array2D);
+					return static_cast<int>(Instruction::Exit);
+				}
+				else //New
+				{
+
+					std::cout << "==========================" << std::endl;
+					std::cout << "Do you want to play again?" << std::endl;
+					std::cout << "1. Yes" << std::endl;
+					std::cout << "0. No!" << std::endl;
+					if (AskForInputMenu() == 0)
+					{
+						wantToPlay = false;
+						ResetTheGame(array2D);
+					}
+					else
+					{
+						isPlaying = true;
+						ResetTheGame(array2D);
+					}
+				}
+			}
+
+			TicTacShowMenu(); //New
+			index = AskForInputMenu();
+			if (index == 0)
+			{
+				GameNotExit = false;
+			}
+			else
+			{
+				wantToPlay = true;
+				isPlaying = true;
+				system("cls");
+				std::cout << "First Player Name: ";
+				std::cin >> player1;
+				std::cout << "Secund Player Name: ";
+				std::cin >> player2;
+
+				system("cls");
+				ChangeArray(array2D, ' ');
+				DipslayArray(array2D);
+				std::cout << "Type the the number of the box that you want to use:" << std::endl;
+			}
+		}
+	}
 
 	return static_cast<int>(Instruction::Exit);
 }
@@ -1409,12 +1435,13 @@ bool CheckCurvedLineWin()
 	return isWin;
 }
 
-void ShowMenu()
+void TicTacShowMenu()
 {
 	system("cls");
 	std::cout << "================================" << std::endl;
 	std::cout << "Welcome to the Tic Tac Toe Game!" << std::endl;
 	std::cout << "================================" << std::endl;
+	ShowAmountOfWin(locTotalWinMoneyTicTac);
 	std::cout << "1. Play New Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 }
