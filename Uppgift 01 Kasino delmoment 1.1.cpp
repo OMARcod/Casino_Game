@@ -17,8 +17,6 @@ void Play(int& aWalletMoney);
 int GuessGame(int& aWalletMoney);
 int GuessGameMenu(int& aWalletMoney);
 void MoneyMath(int& aWalletMoney, int someAmountOfMoney);
-
-//New Functions
 bool CheckIfEmptyAt(int anIndex);
 void StoreWinOrLose(bool aWinOrLose);
 bool CheckIfReachMaxWinMoney(int aMaxWinMoney);
@@ -26,8 +24,6 @@ void DisplayYouCantPlay();
 void SubtractFromWinMoney(int aWinMoney, const int& anAmountToSubtract);
 void ShowAmountOfWin(const int& aWinMoney);
 void DisplayWinLose();
-
-//TicTacToe
 void ChangeArray(char anArray[][3], char aLetter);
 void ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPlayer);
 void DipslayTicTacArray(char anArray[][3]);
@@ -1053,20 +1049,20 @@ int PlayTicTacToe(int& aWalletMoney)
 	return static_cast<int>(Instruction::Exit);
 }
 
-void ResetTheGame(char array[][3])
+void ResetTheGame(char anArray[][3])
 {
 	for (int i = 0; i < locArraySizeTicTac; i++)
 	{
 		locUsedSpacesInTheArray[i] = static_cast<int>(Instruction::Empty);
 	}
-	ChangeArray(array, ' ');
-	DipslayTicTacArray(array);
+	ChangeArray(anArray, ' ');
+	DipslayTicTacArray(anArray);
 }
 
-int AskForInputGame(const std::string& playerName)
+int AskForInputGame(const std::string& aPlayerName)
 {
 	int index = 0;
-	std::cout << playerName << " Input: ";
+	std::cout << aPlayerName << " Input: ";
 
 	index = CheckInput();
 	while (index < 1 || index > locArraySizeTicTac)
@@ -1193,7 +1189,7 @@ int CheckInput()
 	return input;
 }
 
-void DipslayTicTacArray(char a[][3])
+void DipslayTicTacArray(char anArray[][3])
 {
 	int boxNr = 1;
 
@@ -1203,7 +1199,7 @@ void DipslayTicTacArray(char a[][3])
 	{
 		for (int k = 0; k < locBoxSize; k++)
 		{
-			std::cout << " | " << a[i][k];
+			std::cout << " | " << anArray[i][k];
 		}
 		std::cout << " | ";
 
@@ -1219,86 +1215,86 @@ void DipslayTicTacArray(char a[][3])
 	}
 }
 
-void ChangeArray(char a[][3], char letter)
+void ChangeArray(char anArray[][3], char aLetter)
 {
 	for (int i = 0; i < locBoxSize; i++)
 	{
 		for (int k = 0; k < locBoxSize; k++)
 		{
-			a[i][k] = letter;
+			anArray[i][k] = aLetter;
 		}
 	}
 }
 
-bool CheckIndexIsUsed(int index)
+bool CheckIndexIsUsed(int anIndex)
 {
 	bool isUsed = false;
-	if (locUsedSpacesInTheArray[index - 1] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[index - 1] == static_cast<int>(Instruction::Lose))
+	if (locUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Lose))
 	{
 		isUsed = true;
 	}
 	return isUsed;
 }
 
-void ChangeArrayAtLocation(char a[][3], char letter, int index, int player)
+void ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPlayer)
 {
 	int row = 0;
 	int column = 0;
 
-	switch (index)
+	switch (anIndex)
 	{
 	case 1:
 		row = 0;
 		column = 0;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 
 		break;
 	case 2:
 		row = 0;
 		column = 1;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 
 		break;
 	case 3:
 		row = 0;
 		column = 2;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 4:
 		row = 1;
 		column = 0;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 5:
 		row = 1;
 		column = 1;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 6:
 		row = 1;
 		column = 2;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 7:
 		row = 2;
 		column = 0;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 8:
 		row = 2;
 		column = 1;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 9:
 		row = 2;
 		column = 2;
-		locUsedSpacesInTheArray[index - 1] += player;
+		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	default:
 		break;
 	}
 
-	a[row][column] = letter;
+	anArray[row][column] = aLetter;
 }
 
 bool CheckIfArrayIsFull()
@@ -1339,20 +1335,21 @@ bool CheckIfWin()
 bool CheckHorisontalWin()
 {
 	bool isWin = false;
-	int beginIndex = 0;
+	int startIndex = 0;
+	int nrToAdd = 1;
 	for (int i = 0; i < locBoxSize; i++)
 	{
-		if (CheckThisRow(beginIndex, locPlayerX, 1))
+		if (CheckThisRow(startIndex, locPlayerX, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(beginIndex, locPlayerO, 1))
+		else if (CheckThisRow(startIndex, locPlayerO, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		beginIndex += 3;
+		startIndex += 3;
 	}
 
 	return isWin;
@@ -1361,28 +1358,28 @@ bool CheckHorisontalWin()
 bool CheckVerticalWin()
 {
 	bool isWin = false;
-	int beginIndex = 0;
-
+	int startIndex = 0;
+	int nrToAdd = 3;
 	for (int i = 0; i < locBoxSize; i++)
 	{
-		if (CheckThisRow(beginIndex, locPlayerX, 3))
+		if (CheckThisRow(startIndex, locPlayerX, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(beginIndex, locPlayerO, 3))
+		else if (CheckThisRow(startIndex, locPlayerO, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		beginIndex += 1;
+		startIndex += 1;
 	}
 	return isWin;
 }
 
-bool CheckThisRow(int beginIndex, int player, int toAdd)
+bool CheckThisRow(int aStartIndex, int aPlayer, int toAdd)
 {
-	if (locUsedSpacesInTheArray[beginIndex] == player && locUsedSpacesInTheArray[beginIndex + toAdd] == player && locUsedSpacesInTheArray[beginIndex + (toAdd * 2)] == player)
+	if (locUsedSpacesInTheArray[aStartIndex] == aPlayer && locUsedSpacesInTheArray[aStartIndex + toAdd] == aPlayer && locUsedSpacesInTheArray[aStartIndex + (toAdd * 2)] == aPlayer)
 	{
 		return true;
 	}
