@@ -45,16 +45,16 @@ int RandomIndex();
 int returnRandomEmptyIndex();
 int PlayTicTacToe(int& aWalletMoney);
 
-static const int locMaxMoney = 5000;
-static int locTotalWinMoneyGuess = 0;
-static int locTotalWinMoneyOddEven = 0;
-static int locTotalWinMoneyTicTac = 0;
-static const int locArraySize = 5;
-static int locHistoryOfWinAndLose[locArraySize] = { 0 };
+static const int globalMaxMoney = 5000;
+static int globalTotalWinMoneyGuess = 0;
+static int globalTotalWinMoneyOddEven = 0;
+static int globalTotalWinMoneyTicTac = 0;
+static const int globalArraySize = 5;
+static int globalHistoryOfWinAndLose[globalArraySize] = { 0 };
 
-static int const locArraySizeTicTac = 9;
-static int locUsedSpacesInTheArray[locArraySizeTicTac]{ 0 };
-static int locBoxSize = 3;
+static int const globalArraySizeTicTac = 9;
+static int globalUsedSpacesInTheArray[globalArraySizeTicTac]{ 0 };
+static int globalBoxSize = 3;
 
 enum class Player
 {
@@ -233,18 +233,6 @@ int PlayOddAndEven(int& aWalletMoney)
 		dice2 = (dice2 % 2);
 		int even = 0;
 		int odd = 1;
-		if (dice1 == odd && dice2 == odd)
-		{
-			std::cout << "odd" << std::endl;
-		}
-		else if (dice1 == even && dice2 == even)
-		{
-			std::cout << "even" << std::endl;
-		}
-		else
-		{
-			std::cout << ":(" << std::endl;
-		}
 
 		if (aWalletMoney > 0)
 		{
@@ -252,7 +240,7 @@ int PlayOddAndEven(int& aWalletMoney)
 			amountOfMoney = AskAmountMoney(aWalletMoney);
 
 		}
-		ShowAmountOfWin(locTotalWinMoneyOddEven);
+		ShowAmountOfWin(globalTotalWinMoneyOddEven);
 		std::cout << "I have thrown 2 dices!  ";
 		std::cout << "What do want to chose? odd or even" << std::endl;
 		std::cout << std::endl;
@@ -273,9 +261,9 @@ int PlayOddAndEven(int& aWalletMoney)
 				system("cls");
 
 				MoneyMath(aWalletMoney, amountOfMoney * 3);
-				locTotalWinMoneyOddEven += amountOfMoney * 3;
+				globalTotalWinMoneyOddEven += amountOfMoney * 3;
 
-				if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
+				if (CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
 				{
 					DisplayYouCantPlay();
 					isPlaying = false;
@@ -308,9 +296,9 @@ int PlayOddAndEven(int& aWalletMoney)
 
 
 				MoneyMath(aWalletMoney, amountOfMoney * 3);
-				locTotalWinMoneyOddEven += amountOfMoney * 3;
+				globalTotalWinMoneyOddEven += amountOfMoney * 3;
 
-				if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
+				if (CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
 				{
 					DisplayYouCantPlay();
 					isPlaying = false;
@@ -346,7 +334,7 @@ int PlayOddAndEven(int& aWalletMoney)
 				system("cls");
 
 				MoneyMath(aWalletMoney, -amountOfMoney);
-				SubtractFromWinMoney(locTotalWinMoneyOddEven, amountOfMoney);
+				SubtractFromWinMoney(globalTotalWinMoneyOddEven, amountOfMoney);
 
 
 				wrongGuess = false;
@@ -397,7 +385,8 @@ int OddAndEvenGameMenu(int& aWalletMoney)
 		std::cout << "1. Play" << std::endl;
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
-		ShowAmountOfWin(locTotalWinMoneyOddEven);
+		DisplayWinLose();
+		ShowAmountOfWin(globalTotalWinMoneyOddEven);
 
 
 		inputNr = ReadInputInteger();
@@ -405,7 +394,7 @@ int OddAndEvenGameMenu(int& aWalletMoney)
 		switch (inputNr)
 		{
 		case 1:
-			if (CheckIfReachMaxWinMoney(locTotalWinMoneyOddEven))
+			if (CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
 			{
 				DisplayYouCantPlay();
 			}
@@ -555,11 +544,11 @@ void SubtractFromWinMoney(int aWinMoney, const int& anAmountToSubtract)
 {
 	if (aWinMoney > anAmountToSubtract)
 	{
-		locTotalWinMoneyGuess -= anAmountToSubtract;
+		globalTotalWinMoneyGuess -= anAmountToSubtract;
 	}
 	else
 	{
-		locTotalWinMoneyGuess = 0;
+		globalTotalWinMoneyGuess = 0;
 	}
 }
 
@@ -609,8 +598,8 @@ int GuessGame(int& aWalletMoney)
 		{
 			amountOfMoney = AskAmountMoney(aWalletMoney);
 		}
-		ShowAmountOfWin(locTotalWinMoneyGuess);
-		std::cout << "guess the sum of the two dices ? \t\t" << sumOfDices << std::endl;
+		ShowAmountOfWin(globalTotalWinMoneyGuess);
+		std::cout << "guess the sum of the two dices ?" << std::endl;
 
 		std::cout << "Your Input: ";
 
@@ -638,7 +627,7 @@ int GuessGame(int& aWalletMoney)
 
 					MoneyMath(aWalletMoney, -amountOfMoney);
 
-					SubtractFromWinMoney(locTotalWinMoneyGuess, amountOfMoney);
+					SubtractFromWinMoney(globalTotalWinMoneyGuess, amountOfMoney);
 
 					wrongGuess = false;
 
@@ -652,7 +641,7 @@ int GuessGame(int& aWalletMoney)
 						std::cout << "you have lost!" << std::endl;
 						StoreWinOrLose(lose);
 
-						if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
+						if (CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
 						{
 							DisplayYouCantPlay();
 							isPlaying = false;
@@ -709,9 +698,9 @@ int GuessGame(int& aWalletMoney)
 					StoreWinOrLose(win);
 
 					MoneyMath(aWalletMoney, amountOfMoney * 2);
-					locTotalWinMoneyGuess += amountOfMoney * 2;
+					globalTotalWinMoneyGuess += amountOfMoney * 2;
 
-					if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
+					if (CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
 					{
 						DisplayYouCantPlay();
 						isPlaying = false;
@@ -754,14 +743,16 @@ int GuessGameMenu(int& aWalletMoney)
 		std::cout << "1. Play" << std::endl;
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
-		ShowAmountOfWin(locTotalWinMoneyGuess);
+		std::cout << "==================" << std::endl;
+		DisplayWinLose();
+		ShowAmountOfWin(globalTotalWinMoneyGuess);
 
 		inputNr = ReadInputInteger();
 
 		switch (inputNr)
 		{
 		case 1:
-			if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
+			if (CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
 			{
 				DisplayYouCantPlay();
 			}
@@ -811,7 +802,7 @@ int GuessGameMenu(int& aWalletMoney)
 
 bool CheckIfReachMaxWinMoney(int aMaxWinMoney)
 {
-	bool isReached = aMaxWinMoney >= locMaxMoney;
+	bool isReached = aMaxWinMoney >= globalMaxMoney;
 	return isReached;
 }
 
@@ -822,34 +813,34 @@ void StoreWinOrLose(bool isWin)
 	{
 		if (isWin)
 		{
-			for (int i = 0; i < locArraySize; i++)
+			for (int i = 0; i < globalArraySize; i++)
 			{
-				if (CheckIfEmptyAt(locHistoryOfWinAndLose[i]))
+				if (CheckIfEmptyAt(globalHistoryOfWinAndLose[i]))
 				{
-					locHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Win);
+					globalHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Win);
 					return;
 				}
 			}
 		}
 		else
 		{
-			for (int i = 0; i < locArraySize; i++)
+			for (int i = 0; i < globalArraySize; i++)
 			{
-				if (CheckIfEmptyAt(locHistoryOfWinAndLose[i]))
+				if (CheckIfEmptyAt(globalHistoryOfWinAndLose[i]))
 				{
-					locHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Lose);
+					globalHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Lose);
 					return;
 				}
 			}
 		}
 		int temp = 0;
-		for (int i = locArraySize - 1; i > 0; i--)
+		for (int i = globalArraySize - 1; i > 0; i--)
 		{
-			temp = locHistoryOfWinAndLose[i - 1];
-			locHistoryOfWinAndLose[i - 1] = locHistoryOfWinAndLose[i];
-			locHistoryOfWinAndLose[i] = temp;
+			temp = globalHistoryOfWinAndLose[i - 1];
+			globalHistoryOfWinAndLose[i - 1] = globalHistoryOfWinAndLose[i];
+			globalHistoryOfWinAndLose[i] = temp;
 		}
-		locHistoryOfWinAndLose[0] = static_cast<int>(Instruction::Empty);
+		globalHistoryOfWinAndLose[0] = static_cast<int>(Instruction::Empty);
 	}
 }
 
@@ -860,13 +851,13 @@ bool CheckIfEmptyAt(int anIndex)
 
 void DisplayWinLose()
 {
-	for (int i = 0; i < locArraySize; i++)
+	for (int i = 0; i < globalArraySize; i++)
 	{
-		if (locHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Win))
+		if (globalHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Win))
 		{
 			std::cout << i + 1 << ": win ";
 		}
-		else if (locHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Lose))
+		else if (globalHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Lose))
 		{
 			std::cout << i + 1 << ": lose ";
 		}
@@ -879,6 +870,7 @@ void DisplayWinLose()
 	}
 	std::cout << std::endl;
 }
+
 int PlayTicTacToe(int& aWalletMoney)
 {
 	char array2D[3][3];
@@ -896,7 +888,7 @@ int PlayTicTacToe(int& aWalletMoney)
 	int amountOfMoney = 0;
 	bool GameNotExit = true;
 
-	if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac))
+	if (CheckIfReachMaxWinMoney(globalTotalWinMoneyTicTac))
 	{
 		DisplayYouCantPlay();
 		return static_cast<int>(Instruction::Exit);
@@ -920,7 +912,7 @@ int PlayTicTacToe(int& aWalletMoney)
 				amountOfMoney = AskAmountMoney(aWalletMoney);
 
 			}
-			ShowAmountOfWin(locTotalWinMoneyTicTac);
+			ShowAmountOfWin(globalTotalWinMoneyTicTac);
 
 			std::cout << "First Player Name: ";
 			std::cin >> playerName;
@@ -969,7 +961,7 @@ int PlayTicTacToe(int& aWalletMoney)
 						if (firstPlayer)
 						{
 							MoneyMath(aWalletMoney, -amountOfMoney);
-							SubtractFromWinMoney(locTotalWinMoneyTicTac, amountOfMoney);
+							SubtractFromWinMoney(globalTotalWinMoneyTicTac, amountOfMoney);
 							StoreWinOrLose(lose);
 
 
@@ -979,7 +971,7 @@ int PlayTicTacToe(int& aWalletMoney)
 						else
 						{
 							MoneyMath(aWalletMoney, amountOfMoney * 3);
-							locTotalWinMoneyTicTac += amountOfMoney * 3;
+							globalTotalWinMoneyTicTac += amountOfMoney * 3;
 							StoreWinOrLose(win);
 
 
@@ -995,7 +987,7 @@ int PlayTicTacToe(int& aWalletMoney)
 					}
 				}
 
-				if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac) || aWalletMoney == static_cast<int>(Instruction::Empty))
+				if (CheckIfReachMaxWinMoney(globalTotalWinMoneyTicTac) || aWalletMoney == static_cast<int>(Instruction::Empty))
 				{
 					DisplayYouCantPlay();
 					wantToPlay = false;
@@ -1051,9 +1043,9 @@ int PlayTicTacToe(int& aWalletMoney)
 
 void ResetTheGame(char anArray[][3])
 {
-	for (int i = 0; i < locArraySizeTicTac; i++)
+	for (int i = 0; i < globalArraySizeTicTac; i++)
 	{
-		locUsedSpacesInTheArray[i] = static_cast<int>(Instruction::Empty);
+		globalUsedSpacesInTheArray[i] = static_cast<int>(Instruction::Empty);
 	}
 	ChangeArray(anArray, ' ');
 	DipslayTicTacArray(anArray);
@@ -1065,7 +1057,7 @@ int AskForInputGame(const std::string& aPlayerName)
 	std::cout << aPlayerName << " Input: ";
 
 	index = CheckInput();
-	while (index < 1 || index > locArraySizeTicTac)
+	while (index < 1 || index > globalArraySizeTicTac)
 	{
 		std::cout << "Pleas Enter a number between 1 and 9 ...." << std::endl;
 		std::cout << "Your Input: ";
@@ -1079,7 +1071,7 @@ int EasyEnemi()
 	int index = 0;
 
 	index = RandomIndex();
-	while (index < 1 || index > locArraySizeTicTac)
+	while (index < 1 || index > globalArraySizeTicTac)
 	{
 		std::cout << "Pleas Enter a number between 1 and 9 ...." << std::endl;
 		std::cout << "Your Input: ";
@@ -1090,12 +1082,12 @@ int EasyEnemi()
 
 int RandomIndex()
 {
-	int lastIndex = locArraySizeTicTac - 1;
+	int lastIndex = globalArraySizeTicTac - 1;
 	int index = RandomNumber(1, lastIndex);
 	bool isUsed = true;
 	while (isUsed)
 	{
-		if (locUsedSpacesInTheArray[index] > 0 && locUsedSpacesInTheArray[index] < 3)
+		if (globalUsedSpacesInTheArray[index] > 0 && globalUsedSpacesInTheArray[index] < 3)
 		{
 			index = RandomNumber(1, lastIndex);
 		}
@@ -1128,7 +1120,7 @@ int returnRandomEmptyIndex()
 	int RandomLoop = RandomNumber(0, 10);
 	if (RandomLoop > 5)
 	{
-		for (int i = 1; i < locArraySizeTicTac + 1; i++)
+		for (int i = 1; i < globalArraySizeTicTac + 1; i++)
 		{
 			if (!(CheckIndexIsUsed(i)))
 			{
@@ -1139,7 +1131,7 @@ int returnRandomEmptyIndex()
 	}
 	else
 	{
-		for (int i = locArraySizeTicTac; i > 0; i--)
+		for (int i = globalArraySizeTicTac; i > 0; i--)
 		{
 			if (!(CheckIndexIsUsed(i)))
 			{
@@ -1195,16 +1187,16 @@ void DipslayTicTacArray(char anArray[][3])
 
 	system("cls");
 	std::cout << "-----------------" << std::endl;
-	for (int i = 0; i < locBoxSize; i++)
+	for (int i = 0; i < globalBoxSize; i++)
 	{
-		for (int k = 0; k < locBoxSize; k++)
+		for (int k = 0; k < globalBoxSize; k++)
 		{
 			std::cout << " | " << anArray[i][k];
 		}
 		std::cout << " | ";
 
 		std::cout << "\t\t";
-		for (int i = 0; i < locBoxSize; i++)
+		for (int i = 0; i < globalBoxSize; i++)
 		{
 			std::cout << " | " << boxNr;
 			boxNr++;
@@ -1217,9 +1209,9 @@ void DipslayTicTacArray(char anArray[][3])
 
 void ChangeArray(char anArray[][3], char aLetter)
 {
-	for (int i = 0; i < locBoxSize; i++)
+	for (int i = 0; i < globalBoxSize; i++)
 	{
-		for (int k = 0; k < locBoxSize; k++)
+		for (int k = 0; k < globalBoxSize; k++)
 		{
 			anArray[i][k] = aLetter;
 		}
@@ -1229,7 +1221,7 @@ void ChangeArray(char anArray[][3], char aLetter)
 bool CheckIndexIsUsed(int anIndex)
 {
 	bool isUsed = false;
-	if (locUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Lose))
+	if (globalUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Win) || globalUsedSpacesInTheArray[anIndex - 1] == static_cast<int>(Instruction::Lose))
 	{
 		isUsed = true;
 	}
@@ -1246,49 +1238,49 @@ void ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPl
 	case 1:
 		row = 0;
 		column = 0;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 
 		break;
 	case 2:
 		row = 0;
 		column = 1;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 
 		break;
 	case 3:
 		row = 0;
 		column = 2;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 4:
 		row = 1;
 		column = 0;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 5:
 		row = 1;
 		column = 1;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 6:
 		row = 1;
 		column = 2;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 7:
 		row = 2;
 		column = 0;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 8:
 		row = 2;
 		column = 1;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	case 9:
 		row = 2;
 		column = 2;
-		locUsedSpacesInTheArray[anIndex - 1] += aPlayer;
+		globalUsedSpacesInTheArray[anIndex - 1] += aPlayer;
 		break;
 	default:
 		break;
@@ -1301,14 +1293,14 @@ bool CheckIfArrayIsFull()
 {
 	bool isFull = false;
 	int nrOfBoxesUsed = 0;
-	for (int i = 0; i < locArraySizeTicTac; i++)
+	for (int i = 0; i < globalArraySizeTicTac; i++)
 	{
-		if (locUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Lose))
+		if (globalUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Win) || globalUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Lose))
 		{
 			nrOfBoxesUsed++;
 		}
 	}
-	if (nrOfBoxesUsed >= locArraySizeTicTac)
+	if (nrOfBoxesUsed >= globalArraySizeTicTac)
 	{
 		isFull = true;
 	}
@@ -1337,7 +1329,7 @@ bool CheckHorisontalWin()
 	bool isWin = false;
 	int startIndex = 0;
 	int nrToAdd = 1;
-	for (int i = 0; i < locBoxSize; i++)
+	for (int i = 0; i < globalBoxSize; i++)
 	{
 		if (CheckThisRow(startIndex, locPlayerX, nrToAdd))
 		{
@@ -1360,7 +1352,7 @@ bool CheckVerticalWin()
 	bool isWin = false;
 	int startIndex = 0;
 	int nrToAdd = 3;
-	for (int i = 0; i < locBoxSize; i++)
+	for (int i = 0; i < globalBoxSize; i++)
 	{
 		if (CheckThisRow(startIndex, locPlayerX, nrToAdd))
 		{
@@ -1379,7 +1371,7 @@ bool CheckVerticalWin()
 
 bool CheckThisRow(int aStartIndex, int aPlayer, int toAdd)
 {
-	if (locUsedSpacesInTheArray[aStartIndex] == aPlayer && locUsedSpacesInTheArray[aStartIndex + toAdd] == aPlayer && locUsedSpacesInTheArray[aStartIndex + (toAdd * 2)] == aPlayer)
+	if (globalUsedSpacesInTheArray[aStartIndex] == aPlayer && globalUsedSpacesInTheArray[aStartIndex + toAdd] == aPlayer && globalUsedSpacesInTheArray[aStartIndex + (toAdd * 2)] == aPlayer)
 	{
 		return true;
 	}
@@ -1431,7 +1423,8 @@ void TicTacShowMenu()
 	std::cout << "================================" << std::endl;
 	std::cout << "Welcome to the Tic Tac Toe Game!" << std::endl;
 	std::cout << "================================" << std::endl;
-	ShowAmountOfWin(locTotalWinMoneyTicTac);
+	DisplayWinLose();
+	ShowAmountOfWin(globalTotalWinMoneyTicTac);
 	std::cout << "1. Play New Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 }
