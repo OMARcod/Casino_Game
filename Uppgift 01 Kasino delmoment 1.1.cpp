@@ -20,53 +20,53 @@ void MoneyMath(int& aWalletMoney, int someAmountOfMoney);
 
 //New Functions
 bool CheckIfEmptyAt(int anIndex);
-void StorWinGame(bool isWin);
+void StoreWinOrLose(bool aWinOrLose);
 bool CheckIfReachMaxWinMoney(int aMaxWinMoney);
 void DisplayYouCantPlay();
-void SubtractFromWinMoney(int aWinMoney, const int& amountToSubtract);
+void SubtractFromWinMoney(int aWinMoney, const int& anAmountToSubtract);
 void ShowAmountOfWin(const int& aWinMoney);
 void DisplayWinLose();
 
 //TicTacToe
-void ChangeArray(char a[][3], char letter);
-void ChangeArrayAtLocation(char a[][3], char letter, int index, int player);
-void DipslayArray(char a[][3]);
-int AskForInputGame(std::string playerName);
+void ChangeArray(char anArray[][3], char aLetter);
+void ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPlayer);
+void DipslayTicTacArray(char anArray[][3]);
+int AskForInputGame(const std::string &aPlayerName);
 int AskForInputMenu();
 int CheckInput();
-bool CheckIndexIsUsed(int index);
-bool CheckIfFull();
+bool CheckIndexIsUsed(int anIndex);
+bool CheckIfArrayIsFull();
 bool CheckIfWin();
 bool CheckHorisontalWin();
 bool CheckVerticalWin();
 bool CheckCurvedLineWin();
-bool CheckThisRow(int beginIndex, int player, int toAdd);
+bool CheckThisRow(int aStartIndex, int aPlayer, int aNrToAdd);
 void TicTacShowMenu();
-void ResetTheGame(char array[][3]);
-int RandomIndex();
+void ResetTheGame(char anArray[][3]);
 int EasyEnemi();
 int RandomNumber(int aMin, int aMax);
 int RandomIndex();
-int returnEmptyIndex();
+int returnRandomEmptyIndex();
 int PlayTicTacToe(int& aWalletMoney);
 
 static const int locMaxMoney = 5000;
 static int locTotalWinMoneyGuess = 0;
 static int locTotalWinMoneyOddEven = 0;
 static int locTotalWinMoneyTicTac = 0;
-static const int arraySize = 5;
-int historyWin[arraySize] = { 0 };
+static const int locArraySize = 5;
+static int locHistoryOfWinAndLose[locArraySize] = { 0 };
 
-static int const arraySizeSpace = 9;
-static int usedSpace[arraySizeSpace]{ 0 };
+static int const locArraySizeTicTac = 9;
+static int locUsedSpacesInTheArray[locArraySizeTicTac]{ 0 };
+static int locBoxSize = 3;
 
 enum class Player
 {
 	X = 1,
 	O = 2,
 };
-int playerO = static_cast<int>(Player::O);
-int playerX = static_cast<int>(Player::X);
+static const int locPlayerO = static_cast<int>(Player::O);
+static const int locPlayerX = static_cast<int>(Player::X);
 
 enum class Instruction
 {
@@ -291,7 +291,7 @@ int PlayOddAndEven(int& aWalletMoney)
 
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					StorWinGame(win);
+					StoreWinOrLose(win);
 
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
 
@@ -327,7 +327,7 @@ int PlayOddAndEven(int& aWalletMoney)
 
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					StorWinGame(win);
+					StoreWinOrLose(win);
 
 
 
@@ -365,7 +365,7 @@ int PlayOddAndEven(int& aWalletMoney)
 					std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
 					std::cout << "you have lost!" << std::endl;
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
-					StorWinGame(lose);
+					StoreWinOrLose(lose);
 
 
 					if (ReadInputChar() == 'n')
@@ -555,11 +555,11 @@ void ShowAmountOfWin(const int& aWinMoney)
 	std::cout << "=====================================" << std::endl;
 }
 
-void SubtractFromWinMoney(int aWinMoney, const int& amountToSubtract)
+void SubtractFromWinMoney(int aWinMoney, const int& anAmountToSubtract)
 {
-	if (aWinMoney > amountToSubtract)
+	if (aWinMoney > anAmountToSubtract)
 	{
-		locTotalWinMoneyGuess -= amountToSubtract;
+		locTotalWinMoneyGuess -= anAmountToSubtract;
 	}
 	else
 	{
@@ -654,7 +654,7 @@ int GuessGame(int& aWalletMoney)
 					else
 					{
 						std::cout << "you have lost!" << std::endl;
-						StorWinGame(lose);
+						StoreWinOrLose(lose);
 
 						if (CheckIfReachMaxWinMoney(locTotalWinMoneyGuess))
 						{
@@ -710,7 +710,7 @@ int GuessGame(int& aWalletMoney)
 					std::cout << "==================" << std::endl;
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					StorWinGame(win);
+					StoreWinOrLose(win);
 
 					MoneyMath(aWalletMoney, amountOfMoney * 2);
 					locTotalWinMoneyGuess += amountOfMoney * 2;
@@ -813,54 +813,47 @@ int GuessGameMenu(int& aWalletMoney)
 	return static_cast<int>(Instruction::Exit);
 }
 
-
-//New
 bool CheckIfReachMaxWinMoney(int aMaxWinMoney)
 {
 	bool isReached = aMaxWinMoney >= locMaxMoney;
 	return isReached;
 }
 
-void StorWinGame(bool isWin)
+void StoreWinOrLose(bool isWin)
 {
 	bool ok = true;
 	while (ok)
 	{
 		if (isWin)
 		{
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < locArraySize; i++)
 			{
-				if (CheckIfEmptyAt(historyWin[i]))
+				if (CheckIfEmptyAt(locHistoryOfWinAndLose[i]))
 				{
-					historyWin[i] = static_cast<int>(Instruction::Win);
+					locHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Win);
 					return;
 				}
 			}
 		}
 		else
 		{
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < locArraySize; i++)
 			{
-				if (CheckIfEmptyAt(historyWin[i]))
+				if (CheckIfEmptyAt(locHistoryOfWinAndLose[i]))
 				{
-					historyWin[i] = static_cast<int>(Instruction::Lose);
+					locHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Lose);
 					return;
 				}
 			}
 		}
-
-		//if is full
-		//stor the make the fist element emepty
-		//push the rest to one element to the right
-
 		int temp = 0;
-		for (int i = 4; i > 0; i--)
+		for (int i = locArraySize - 1; i > 0; i--)
 		{
-			temp = historyWin[i - 1];
-			historyWin[i - 1] = historyWin[i];
-			historyWin[i] = temp;
+			temp = locHistoryOfWinAndLose[i - 1];
+			locHistoryOfWinAndLose[i - 1] = locHistoryOfWinAndLose[i];
+			locHistoryOfWinAndLose[i] = temp;
 		}
-		historyWin[0] = static_cast<int>(Instruction::Empty);
+		locHistoryOfWinAndLose[0] = static_cast<int>(Instruction::Empty);
 	}
 }
 
@@ -871,13 +864,13 @@ bool CheckIfEmptyAt(int anIndex)
 
 void DisplayWinLose()
 {
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < locArraySize; i++)
 	{
-		if (historyWin[i] == 1)
+		if (locHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Win))
 		{
 			std::cout << i + 1 << ": win ";
 		}
-		else if (historyWin[i] == 2)
+		else if (locHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Lose))
 		{
 			std::cout << i + 1 << ": lose ";
 		}
@@ -890,56 +883,55 @@ void DisplayWinLose()
 	}
 	std::cout << std::endl;
 }
-
-
-//TicTacToe
-
 int PlayTicTacToe(int& aWalletMoney)
 {
-	const int row = 3, column = 3;
 	char array2D[3][3];
 	int index = 0;
-
+	bool lose = false;
+	bool win = true;
 
 	bool isPlaying = true;
 	bool firstPlayer = true;
+
 	TicTacShowMenu();
 	index = AskForInputMenu();
 
-	std::string player1 = "";
-	std::string player2 = "";
-
-
-	//New Things
+	std::string playerName = "";
 	int amountOfMoney = 0;
+	bool GameNotExit = true;
 
-
-	while (aWalletMoney != 0)
+	if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac))
 	{
-		bool GameNotExit = true;
+		DisplayYouCantPlay();
+		return static_cast<int>(Instruction::Exit);
+	}
+
+	while (aWalletMoney != static_cast<int>(Instruction::Empty))
+	{
 
 		if (index == 0)
 		{
 			GameNotExit = false;
+			return static_cast<int>(Instruction::Exit);
 		}
 		else
 		{
 			system("cls");
 
-			if (aWalletMoney > 0) //New
+			if (aWalletMoney > static_cast<int>(Instruction::Empty))
 			{
 
-				amountOfMoney = AskAmountMoney(aWalletMoney); //New
+				amountOfMoney = AskAmountMoney(aWalletMoney);
 
 			}
-			ShowAmountOfWin(locTotalWinMoneyTicTac); //New
+			ShowAmountOfWin(locTotalWinMoneyTicTac);
 
 			std::cout << "First Player Name: ";
-			std::cin >> player1;
+			std::cin >> playerName;
 
 			system("cls");
 			ChangeArray(array2D, ' ');
-			DipslayArray(array2D);
+			DipslayTicTacArray(array2D);
 			std::cout << "Type the the number of the box that you want to use:" << std::endl;
 		}
 		bool wantToPlay = true;
@@ -952,11 +944,11 @@ int PlayTicTacToe(int& aWalletMoney)
 				{
 					if (firstPlayer)
 					{
-						index = AskForInputGame(player1);
+						index = AskForInputGame(playerName);
 					}
 					else
 					{
-						index = returnEmptyIndex();
+						index = returnRandomEmptyIndex();
 					}
 					if (CheckIndexIsUsed(index))
 					{
@@ -974,45 +966,48 @@ int PlayTicTacToe(int& aWalletMoney)
 							ChangeArrayAtLocation(array2D, 'O', index, static_cast<int>(Player::O));
 							firstPlayer = true;
 						}
-						DipslayArray(array2D);
+						DipslayTicTacArray(array2D);
 					}
 					if (CheckIfWin())
 					{
 						if (firstPlayer)
 						{
-							MoneyMath(aWalletMoney, -amountOfMoney); //New
-							SubtractFromWinMoney(locTotalWinMoneyTicTac, amountOfMoney); //New
+							MoneyMath(aWalletMoney, -amountOfMoney);
+							SubtractFromWinMoney(locTotalWinMoneyTicTac, amountOfMoney);
+							StoreWinOrLose(lose);
+
 
 							std::cout << "the comp have Won!" << std::endl;
 							isPlaying = false;
 						}
 						else
 						{
-							MoneyMath(aWalletMoney, amountOfMoney * 3); //New
-							locTotalWinMoneyTicTac += amountOfMoney * 3; //New
+							MoneyMath(aWalletMoney, amountOfMoney * 3);
+							locTotalWinMoneyTicTac += amountOfMoney * 3;
+							StoreWinOrLose(win);
 
 
-							std::cout << player2 << " You Won!" << std::endl;
+
+							std::cout << playerName << " You Won!" << std::endl;
 							isPlaying = false;
 						}
 					}
-					else if (CheckIfFull())
+					else if (CheckIfArrayIsFull())
 					{
 						std::cout << "The box is full" << std::endl;
 						isPlaying = false;
 					}
 				}
 
-				if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac))  //New
+				if (CheckIfReachMaxWinMoney(locTotalWinMoneyTicTac) || aWalletMoney == static_cast<int>(Instruction::Empty))
 				{
 					DisplayYouCantPlay();
 					wantToPlay = false;
 					ResetTheGame(array2D);
 					return static_cast<int>(Instruction::Exit);
 				}
-				else //New
+				else 
 				{
-
 					std::cout << "==========================" << std::endl;
 					std::cout << "Do you want to play again?" << std::endl;
 					std::cout << "1. Yes" << std::endl;
@@ -1026,11 +1021,18 @@ int PlayTicTacToe(int& aWalletMoney)
 					{
 						isPlaying = true;
 						ResetTheGame(array2D);
+
+						if (aWalletMoney > 0)
+						{
+							amountOfMoney = AskAmountMoney(aWalletMoney);
+							system("pause");
+
+						}
 					}
 				}
 			}
 
-			TicTacShowMenu(); //New
+			TicTacShowMenu();
 			index = AskForInputMenu();
 			if (index == 0)
 			{
@@ -1041,14 +1043,8 @@ int PlayTicTacToe(int& aWalletMoney)
 				wantToPlay = true;
 				isPlaying = true;
 				system("cls");
-				std::cout << "First Player Name: ";
-				std::cin >> player1;
-				std::cout << "Secund Player Name: ";
-				std::cin >> player2;
-
-				system("cls");
 				ChangeArray(array2D, ' ');
-				DipslayArray(array2D);
+				DipslayTicTacArray(array2D);
 				std::cout << "Type the the number of the box that you want to use:" << std::endl;
 			}
 		}
@@ -1059,21 +1055,21 @@ int PlayTicTacToe(int& aWalletMoney)
 
 void ResetTheGame(char array[][3])
 {
-	for (int i = 0; i < arraySizeSpace; i++)
+	for (int i = 0; i < locArraySizeTicTac; i++)
 	{
-		usedSpace[i] = 0;
+		locUsedSpacesInTheArray[i] = static_cast<int>(Instruction::Empty);
 	}
 	ChangeArray(array, ' ');
-	DipslayArray(array);
+	DipslayTicTacArray(array);
 }
 
-int AskForInputGame(std::string playerName)
+int AskForInputGame(const std::string& playerName)
 {
 	int index = 0;
 	std::cout << playerName << " Input: ";
 
 	index = CheckInput();
-	while (index < 1 || index > arraySizeSpace)
+	while (index < 1 || index > locArraySizeTicTac)
 	{
 		std::cout << "Pleas Enter a number between 1 and 9 ...." << std::endl;
 		std::cout << "Your Input: ";
@@ -1087,7 +1083,7 @@ int EasyEnemi()
 	int index = 0;
 
 	index = RandomIndex();
-	while (index < 1 || index > arraySizeSpace)
+	while (index < 1 || index > locArraySizeTicTac)
 	{
 		std::cout << "Pleas Enter a number between 1 and 9 ...." << std::endl;
 		std::cout << "Your Input: ";
@@ -1098,13 +1094,12 @@ int EasyEnemi()
 
 int RandomIndex()
 {
-
-	int lastIndex = arraySizeSpace - 1;
+	int lastIndex = locArraySizeTicTac - 1;
 	int index = RandomNumber(1, lastIndex);
 	bool isUsed = true;
 	while (isUsed)
 	{
-		if (usedSpace[index] > 0 && usedSpace[index] < 3)
+		if (locUsedSpacesInTheArray[index] > 0 && locUsedSpacesInTheArray[index] < 3)
 		{
 			index = RandomNumber(1, lastIndex);
 		}
@@ -1117,46 +1112,44 @@ int RandomIndex()
 
 int RandomNumber(int aMin, int aMax)
 {
-
 	std::uniform_int_distribution<int> rndDist(aMin, aMax);
 	int randomNr = rndDist(rndEngine);
 	return randomNr;
 }
 
-int returnEmptyIndex()
+int returnRandomEmptyIndex()
 {
-	int RandomLoop = RandomNumber(0, 10);
-
-
-	int random = 5;
-
+	int index = 5;
 	for (int i = 0; i < 5; i++)
 	{
-		if (!(CheckIndexIsUsed(random)))
+		if (!(CheckIndexIsUsed(index)))
 		{
-			return random;
+			return index;
 		}
-		random = RandomNumber(1, 9);
+		index = RandomNumber(1, 9);
 	}
 
+	int RandomLoop = RandomNumber(0, 10);
 	if (RandomLoop > 5)
 	{
-		for (int i = 1; i < arraySizeSpace + 1; i++)
+		for (int i = 1; i < locArraySizeTicTac + 1; i++)
 		{
 			if (!(CheckIndexIsUsed(i)))
 			{
 				return i;
 			}
+			RandomLoop = RandomNumber(0, 10);
 		}
 	}
 	else
 	{
-		for (int i = arraySizeSpace; i > 0; i--)
+		for (int i = locArraySizeTicTac; i > 0; i--)
 		{
 			if (!(CheckIndexIsUsed(i)))
 			{
 				return i;
 			}
+			RandomLoop = RandomNumber(0, 10);
 		}
 	}
 
@@ -1200,29 +1193,27 @@ int CheckInput()
 	return input;
 }
 
-void DipslayArray(char a[][3])
+void DipslayTicTacArray(char a[][3])
 {
 	int boxNr = 1;
 
 	system("cls");
 	std::cout << "-----------------" << std::endl;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < locBoxSize; i++)
 	{
-		for (int k = 0; k < 3; k++)
+		for (int k = 0; k < locBoxSize; k++)
 		{
 			std::cout << " | " << a[i][k];
 		}
-		std::cout << " | "; //last 
+		std::cout << " | ";
 
-		//other box
 		std::cout << "\t\t";
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < locBoxSize; i++)
 		{
 			std::cout << " | " << boxNr;
 			boxNr++;
 		}
-		std::cout << " | "; //last 
-
+		std::cout << " | ";
 
 		std::cout << "\n-----------------" << std::endl;
 	}
@@ -1230,9 +1221,9 @@ void DipslayArray(char a[][3])
 
 void ChangeArray(char a[][3], char letter)
 {
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < locBoxSize; i++)
 	{
-		for (int k = 0; k < 3; k++)
+		for (int k = 0; k < locBoxSize; k++)
 		{
 			a[i][k] = letter;
 		}
@@ -1242,7 +1233,7 @@ void ChangeArray(char a[][3], char letter)
 bool CheckIndexIsUsed(int index)
 {
 	bool isUsed = false;
-	if (usedSpace[index - 1] == 1 || usedSpace[index - 1] == 2)
+	if (locUsedSpacesInTheArray[index - 1] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[index - 1] == static_cast<int>(Instruction::Lose))
 	{
 		isUsed = true;
 	}
@@ -1259,49 +1250,49 @@ void ChangeArrayAtLocation(char a[][3], char letter, int index, int player)
 	case 1:
 		row = 0;
 		column = 0;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 
 		break;
 	case 2:
 		row = 0;
 		column = 1;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 
 		break;
 	case 3:
 		row = 0;
 		column = 2;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 4:
 		row = 1;
 		column = 0;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 5:
 		row = 1;
 		column = 1;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 6:
 		row = 1;
 		column = 2;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 7:
 		row = 2;
 		column = 0;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 8:
 		row = 2;
 		column = 1;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	case 9:
 		row = 2;
 		column = 2;
-		usedSpace[index - 1] += player;
+		locUsedSpacesInTheArray[index - 1] += player;
 		break;
 	default:
 		break;
@@ -1310,18 +1301,18 @@ void ChangeArrayAtLocation(char a[][3], char letter, int index, int player)
 	a[row][column] = letter;
 }
 
-bool CheckIfFull()
+bool CheckIfArrayIsFull()
 {
 	bool isFull = false;
 	int nrOfBoxesUsed = 0;
-	for (int i = 0; i < arraySizeSpace; i++)
+	for (int i = 0; i < locArraySizeTicTac; i++)
 	{
-		if (usedSpace[i] == 1 || usedSpace[i] == 2)
+		if (locUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Win) || locUsedSpacesInTheArray[i] == static_cast<int>(Instruction::Lose))
 		{
 			nrOfBoxesUsed++;
 		}
 	}
-	if (nrOfBoxesUsed >= arraySizeSpace)
+	if (nrOfBoxesUsed >= locArraySizeTicTac)
 	{
 		isFull = true;
 	}
@@ -1349,15 +1340,14 @@ bool CheckHorisontalWin()
 {
 	bool isWin = false;
 	int beginIndex = 0;
-	int row = 3;
-	for (int i = 0; i < row; i++)
+	for (int i = 0; i < locBoxSize; i++)
 	{
-		if (CheckThisRow(beginIndex, playerX, 1))
+		if (CheckThisRow(beginIndex, locPlayerX, 1))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(beginIndex, playerO, 1))
+		else if (CheckThisRow(beginIndex, locPlayerO, 1))
 		{
 			isWin = true;
 			break;
@@ -1372,15 +1362,15 @@ bool CheckVerticalWin()
 {
 	bool isWin = false;
 	int beginIndex = 0;
-	int column = 3;
-	for (int i = 0; i < column; i++)
+
+	for (int i = 0; i < locBoxSize; i++)
 	{
-		if (CheckThisRow(beginIndex, playerX, 3))
+		if (CheckThisRow(beginIndex, locPlayerX, 3))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(beginIndex, playerO, 3))
+		else if (CheckThisRow(beginIndex, locPlayerO, 3))
 		{
 			isWin = true;
 			break;
@@ -1392,7 +1382,7 @@ bool CheckVerticalWin()
 
 bool CheckThisRow(int beginIndex, int player, int toAdd)
 {
-	if (usedSpace[beginIndex] == player && usedSpace[beginIndex + toAdd] == player && usedSpace[beginIndex + (toAdd * 2)] == player)
+	if (locUsedSpacesInTheArray[beginIndex] == player && locUsedSpacesInTheArray[beginIndex + toAdd] == player && locUsedSpacesInTheArray[beginIndex + (toAdd * 2)] == player)
 	{
 		return true;
 	}
@@ -1403,30 +1393,33 @@ bool CheckCurvedLineWin()
 {
 	bool isWin = false;
 	int line = 2;
-	int secuondLine = 2; //box that begin in indix 2
-	int firstLine = 0; //box that begin at index 0
+	int secuondLine = 2;
+	int firstLine = 0;
+
+	int nrToAdd = 4;
 	for (int i = 0; i < line; i++)
 	{
 
-		if (CheckThisRow(firstLine, playerX, 4))
+		if (CheckThisRow(firstLine, locPlayerX, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(firstLine, playerO, 4))
+		else if (CheckThisRow(firstLine, locPlayerO, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
 	}
+	nrToAdd = 2;
 	for (int i = 0; i < line; i++)
 	{
-		if (CheckThisRow(secuondLine, playerX, 2))
+		if (CheckThisRow(secuondLine, locPlayerX, nrToAdd))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(secuondLine, playerO, 2))
+		else if (CheckThisRow(secuondLine, locPlayerO, nrToAdd))
 		{
 			isWin = true;
 			break;
@@ -1445,5 +1438,3 @@ void TicTacShowMenu()
 	std::cout << "1. Play New Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 }
-
-
