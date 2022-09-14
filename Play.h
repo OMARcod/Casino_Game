@@ -2,6 +2,7 @@
 #include "TicTacToe.h"
 #include "GuessGame.h"
 #include "OddOrEven.h"
+#include "GuessTheNrGame.h"
 
 
 

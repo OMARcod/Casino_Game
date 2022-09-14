@@ -129,10 +129,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GuessGame.cpp" />
+    <ClCompile Include="GuessTheNrGame.cpp" />
     <ClCompile Include="OddOrEven.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="SharedFuncitons.cpp" />
-    <ClCompile Include="test.cpp" />
     <ClCompile Include="TicTacToe.cpp" />
     <ClCompile Include="Main.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -140,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GuessGame.h" />
+    <ClInclude Include="GuessTheNrGame.h" />
     <ClInclude Include="OddOrEven.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="SharedFuncitons.h" />
