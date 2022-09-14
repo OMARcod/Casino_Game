@@ -7,12 +7,7 @@ void Play::Play(int& aWalletMoney)
 	bool isPlaying = true;
 	int choiceOne = 1, choiceTwo = 2, choiceThree = 3, choiceZero = 0;
 
-
-	//New
 	static int historyOfWinAndLose[globalArraySize] = { 0 };
-
-
-
 
 	inputNr = MainMenu(aWalletMoney, historyOfWinAndLose);
 

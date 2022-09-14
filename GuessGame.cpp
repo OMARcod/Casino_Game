@@ -20,7 +20,6 @@ int GuessGame::Play(int& aWalletMoney,int& aTotalWin,int *aHistoryOfWinOrLose)
 	bool lose = false;
 
 	int amountOfMoney = 0;
-	//int amountOfWinMoney = 0;
 
 	std::cout << "======================OBS======================" << std::endl;
 	std::cout << "if the sum of the two dice is not equal your answer you will lose" << std::endl;

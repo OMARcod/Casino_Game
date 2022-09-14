@@ -32,6 +32,5 @@ namespace SharedFuncitons
 	void GamesRules();
 	bool CheckIfEmptyAt(int anIndex);
 	int CheckExit();
-
 };
 
