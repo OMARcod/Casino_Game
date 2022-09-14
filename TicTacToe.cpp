@@ -2,6 +2,7 @@
 
 int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 {
+	int usedSpaces[globalArraySize]{ 0 };
 	char array2D[3][3];
 	int index = 0;
 	bool lose = false;
@@ -65,9 +66,9 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 					}
 					else
 					{
-						index = returnRandomEmptyIndex();
+						index = returnRandomEmptyIndex(usedSpaces);
 					}
-					if (CheckIndexIsUsed(index))
+					if (CheckIndexIsUsed(index, usedSpaces))
 					{
 						std::cout << index << ": box is used! Pleas chose another box" << std::endl;
 					}
@@ -75,17 +76,17 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 					{
 						if (firstPlayer)
 						{
-							ChangeArrayAtLocation(array2D, 'X', index, static_cast<int>(Player::X));
+							ChangeArrayAtLocation(array2D, 'X', index, static_cast<int>(Player::X), usedSpaces);
 							firstPlayer = false;
 						}
 						else
 						{
-							ChangeArrayAtLocation(array2D, 'O', index, static_cast<int>(Player::O));
+							ChangeArrayAtLocation(array2D, 'O', index, static_cast<int>(Player::O),usedSpaces);
 							firstPlayer = true;
 						}
 						DipslayTicTacArray(array2D);
 					}
-					if (CheckIfWin())
+					if (CheckIfWin(usedSpaces))
 					{
 						if (firstPlayer)
 						{
@@ -109,7 +110,7 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 							isPlaying = false;
 						}
 					}
-					else if (CheckIfArrayIsFull())
+					else if (CheckIfArrayIsFull(usedSpaces))
 					{
 						std::cout << "The box is full" << std::endl;
 						isPlaying = false;
@@ -120,7 +121,7 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 				{
 					SharedFuncitons::DisplayYouCantPlay();
 					wantToPlay = false;
-					ResetTheGame(array2D);
+					ResetTheGame(array2D, usedSpaces);
 					return static_cast<int>(Instruction::Exit);
 				}
 				else
@@ -132,12 +133,12 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 					if (AskForInputMenu() == 0)
 					{
 						wantToPlay = false;
-						ResetTheGame(array2D);
+						ResetTheGame(array2D, usedSpaces);
 					}
 					else
 					{
 						isPlaying = true;
-						ResetTheGame(array2D);
+						ResetTheGame(array2D, usedSpaces);
 
 						if (aWalletMoney > 0)
 						{
@@ -170,11 +171,11 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 	return static_cast<int>(Instruction::Exit);
 }
 
-void TicTacToe::ResetTheGame(char anArray[][3])
+void TicTacToe::ResetTheGame(char anArray[][3],int *aUsedSpace)
 {
 	for (int i = 0; i < globalArraySize; i++)
 	{
-		globalUsedSpaces[i] = static_cast<int>(Instruction::Empty);
+		aUsedSpace[i] = static_cast<int>(Instruction::Empty);
 	}
 	ChangeArray(anArray, ' ');
 	DipslayTicTacArray(anArray);
@@ -195,40 +196,6 @@ int TicTacToe::AskForInputGame(const std::string& aPlayerName)
 	return  index;
 }
 
-int TicTacToe::EasyEnemi()
-{
-	int index = 0;
-
-	index = RandomIndex();
-	while (index < 1 || index > globalArraySize)
-	{
-		std::cout << "Pleas Enter a number between 1 and 9 ...." << std::endl;
-		std::cout << "Your Input: ";
-		index = RandomIndex();
-	}
-	return  index;
-}
-
-int TicTacToe::RandomIndex()
-{
-	int lastIndex = globalArraySize - 1;
-	int index = RandomNumber(1, lastIndex);
-	bool isUsed = true;
-	while (isUsed)
-	{
-		if (globalUsedSpaces[index] > 0 && globalUsedSpaces[index] < 3)
-		{
-			index = RandomNumber(1, lastIndex);
-		}
-		else
-		{
-			return index;
-		}
-	}
-
-	return 0;
-}
-
 int TicTacToe::RandomNumber(int aMin, int aMax)
 {
 	std::uniform_int_distribution<int> rndDist(aMin, aMax);
@@ -236,12 +203,12 @@ int TicTacToe::RandomNumber(int aMin, int aMax)
 	return randomNr;
 }
 
-int TicTacToe::returnRandomEmptyIndex()
+int TicTacToe::returnRandomEmptyIndex(const int* aUsedSpace)
 {
 	int index = 5;
 	for (int i = 0; i < 5; i++)
 	{
-		if (!(CheckIndexIsUsed(index)))
+		if (!(CheckIndexIsUsed(index,aUsedSpace)))
 		{
 			return index;
 		}
@@ -253,7 +220,7 @@ int TicTacToe::returnRandomEmptyIndex()
 	{
 		for (int i = 1; i < globalArraySize + 1; i++)
 		{
-			if (!(CheckIndexIsUsed(i)))
+			if (!(CheckIndexIsUsed(i, aUsedSpace)))
 			{
 				return i;
 			}
@@ -264,7 +231,7 @@ int TicTacToe::returnRandomEmptyIndex()
 	{
 		for (int i = globalArraySize; i > 0; i--)
 		{
-			if (!(CheckIndexIsUsed(i)))
+			if (!(CheckIndexIsUsed(i, aUsedSpace)))
 			{
 				return i;
 			}
@@ -319,16 +286,16 @@ void TicTacToe::DipslayTicTacArray(char anArray[][3])
 
 	system("cls");
 	std::cout << "-----------------" << std::endl;
-	for (int i = 0; i < globalBoxSize; i++)
+	for (int i = 0; i < static_cast<int>(Player::BoxSize); i++)
 	{
-		for (int k = 0; k < globalBoxSize; k++)
+		for (int k = 0; k < static_cast<int>(Player::BoxSize); k++)
 		{
 			std::cout << " | " << anArray[i][k];
 		}
 		std::cout << " | ";
 
 		std::cout << "\t\t";
-		for (int j = 0; j < globalBoxSize; j++)
+		for (int j = 0; j < static_cast<int>(Player::BoxSize); j++)
 		{
 			std::cout << " | " << boxNr;
 			boxNr++;
@@ -341,26 +308,26 @@ void TicTacToe::DipslayTicTacArray(char anArray[][3])
 
 void TicTacToe::ChangeArray(char anArray[][3], char aLetter)
 {
-	for (int i = 0; i < globalBoxSize; i++)
+	for (int i = 0; i < static_cast<int>(Player::BoxSize); i++)
 	{
-		for (int k = 0; k < globalBoxSize; k++)
+		for (int k = 0; k < static_cast<int>(Player::BoxSize); k++)
 		{
 			anArray[i][k] = aLetter;
 		}
 	}
 }
 
-bool TicTacToe::CheckIndexIsUsed(int anIndex)
+bool TicTacToe::CheckIndexIsUsed(int anIndex,const int* aUsedSpace)
 {
 	bool isUsed = false;
-	if (globalUsedSpaces[anIndex - 1] == static_cast<int>(Instruction::Win) || globalUsedSpaces[anIndex - 1] == static_cast<int>(Instruction::Lose))
+	if (aUsedSpace[anIndex - 1] == static_cast<int>(Instruction::Win) || aUsedSpace[anIndex - 1] == static_cast<int>(Instruction::Lose))
 	{
 		isUsed = true;
 	}
 	return isUsed;
 }
 
-void TicTacToe::ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPlayer)
+void TicTacToe::ChangeArrayAtLocation(char anArray[][3], char aLetter, int anIndex, int aPlayer,int *aUsedSpace)
 {
 	int row = 0;
 	int column = 0;
@@ -370,49 +337,49 @@ void TicTacToe::ChangeArrayAtLocation(char anArray[][3], char aLetter, int anInd
 	case 1:
 		row = 0;
 		column = 0;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 
 		break;
 	case 2:
 		row = 0;
 		column = 1;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 
 		break;
 	case 3:
 		row = 0;
 		column = 2;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 4:
 		row = 1;
 		column = 0;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 5:
 		row = 1;
 		column = 1;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 6:
 		row = 1;
 		column = 2;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 7:
 		row = 2;
 		column = 0;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 8:
 		row = 2;
 		column = 1;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	case 9:
 		row = 2;
 		column = 2;
-		globalUsedSpaces[anIndex - 1] += aPlayer;
+		aUsedSpace[anIndex - 1] += aPlayer;
 		break;
 	default:
 		break;
@@ -421,13 +388,13 @@ void TicTacToe::ChangeArrayAtLocation(char anArray[][3], char aLetter, int anInd
 	anArray[row][column] = aLetter;
 }
 
-bool TicTacToe::CheckIfArrayIsFull()
+bool TicTacToe::CheckIfArrayIsFull(const int *aUsedSpace)
 {
 	bool isFull = false;
 	int nrOfBoxesUsed = 0;
 	for (int i = 0; i < globalArraySize; i++)
 	{
-		if (globalUsedSpaces[i] == static_cast<int>(Instruction::Win) || globalUsedSpaces[i] == static_cast<int>(Instruction::Lose))
+		if (aUsedSpace[i] == static_cast<int>(Instruction::Win) || aUsedSpace[i] == static_cast<int>(Instruction::Lose))
 		{
 			nrOfBoxesUsed++;
 		}
@@ -439,36 +406,36 @@ bool TicTacToe::CheckIfArrayIsFull()
 	return isFull;
 }
 
-bool TicTacToe::CheckIfWin()
+bool TicTacToe::CheckIfWin(const int* aUsedSpace)
 {
-	bool isWin = CheckHorisontalWin();
+	bool isWin = CheckHorisontalWin(aUsedSpace);
 
 	if (!isWin)
 	{
-		isWin = CheckVerticalWin();
+		isWin = CheckVerticalWin(aUsedSpace);
 
 		if (!isWin)
 		{
-			isWin = CheckCurvedLineWin();
+			isWin = CheckCurvedLineWin(aUsedSpace);
 		}
 	}
 
 	return isWin;
 }
 
-bool TicTacToe::CheckHorisontalWin()
+bool TicTacToe::CheckHorisontalWin(const int* aUsedSpace)
 {
 	bool isWin = false;
 	int startIndex = 0;
 	int nrToAdd = 1;
-	for (int i = 0; i < globalBoxSize; i++)
+	for (int i = 0; i < static_cast<int>(Player::BoxSize); i++)
 	{
-		if (CheckThisRow(startIndex, static_cast<int>(Player::X), nrToAdd))
+		if (CheckThisRow(startIndex, static_cast<int>(Player::X), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(startIndex, static_cast<int>(Player::O), nrToAdd))
+		else if (CheckThisRow(startIndex, static_cast<int>(Player::O), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
@@ -479,19 +446,19 @@ bool TicTacToe::CheckHorisontalWin()
 	return isWin;
 }
 
-bool TicTacToe::CheckVerticalWin()
+bool TicTacToe::CheckVerticalWin(const int *aUsedSpace)
 {
 	bool isWin = false;
 	int startIndex = 0;
 	int nrToAdd = 3;
-	for (int i = 0; i < globalBoxSize; i++)
+	for (int i = 0; i < static_cast<int>(Player::BoxSize); i++)
 	{
-		if (CheckThisRow(startIndex, static_cast<int>(Player::X), nrToAdd))
+		if (CheckThisRow(startIndex, static_cast<int>(Player::X), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(startIndex, static_cast<int>(Player::O), nrToAdd))
+		else if (CheckThisRow(startIndex, static_cast<int>(Player::O), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
@@ -501,16 +468,16 @@ bool TicTacToe::CheckVerticalWin()
 	return isWin;
 }
 
-bool TicTacToe::CheckThisRow(int aStartIndex, int aPlayer, int toAdd)
+bool TicTacToe::CheckThisRow(int aStartIndex, int aPlayer, int toAdd, const int *aUsedSpace)
 {
-	if (globalUsedSpaces[aStartIndex] == aPlayer && globalUsedSpaces[aStartIndex + toAdd] == aPlayer && globalUsedSpaces[aStartIndex + (toAdd * 2)] == aPlayer)
+	if (aUsedSpace[aStartIndex] == aPlayer && aUsedSpace[aStartIndex + toAdd] == aPlayer && aUsedSpace[aStartIndex + (toAdd * 2)] == aPlayer)
 	{
 		return true;
 	}
 	return false;
 }
 
-bool TicTacToe::CheckCurvedLineWin()
+bool TicTacToe::CheckCurvedLineWin(const int *aUsedSpace)
 {
 	bool isWin = false;
 	int line = 2;
@@ -521,12 +488,12 @@ bool TicTacToe::CheckCurvedLineWin()
 	for (int i = 0; i < line; i++)
 	{
 
-		if (CheckThisRow(firstLine, static_cast<int>(Player::X), nrToAdd))
+		if (CheckThisRow(firstLine, static_cast<int>(Player::X), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(firstLine, static_cast<int>(Player::O), nrToAdd))
+		else if (CheckThisRow(firstLine, static_cast<int>(Player::O), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
@@ -535,12 +502,12 @@ bool TicTacToe::CheckCurvedLineWin()
 	nrToAdd = 2;
 	for (int i = 0; i < line; i++)
 	{
-		if (CheckThisRow(secuondLine, static_cast<int>(Player::X), nrToAdd))
+		if (CheckThisRow(secuondLine, static_cast<int>(Player::X), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;
 		}
-		else if (CheckThisRow(secuondLine, static_cast<int>(Player::O), nrToAdd))
+		else if (CheckThisRow(secuondLine, static_cast<int>(Player::O), nrToAdd, aUsedSpace))
 		{
 			isWin = true;
 			break;

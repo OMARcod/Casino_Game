@@ -2,7 +2,7 @@
 
 void Play::Play(int& aWalletMoney)
 {
-
+	
 	int inputNr = 0;
 	bool isPlaying = true;
 	int choiceOne = 1, choiceTwo = 2, choiceThree = 3, choiceZero = 0;
