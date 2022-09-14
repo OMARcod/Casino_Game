@@ -1,6 +1,6 @@
 #include "TicTacToe.h"
 
-int TicTacToe::PlayTicTacToe(int& aWalletMoney)
+int TicTacToe::Play(int& aWalletMoney, int* aHistoryOfWinOrLose)
 {
 	int usedSpaces[globalArraySize]{ 0 };
 	char array2D[3][3];
@@ -8,17 +8,19 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 	bool lose = false;
 	bool win = true;
 
+	static int totalWin = 0;
+
 	bool isPlaying = true;
 	bool firstPlayer = true;
 
-	TicTacShowMenu();
+	TicTacShowMenu(totalWin, aHistoryOfWinOrLose);
 	index = AskForInputMenu();
 
 	std::string playerName = "";
 	int amountOfMoney = 0;
 	bool GameNotExit = true;
 
-	if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyTicTac))
+	if (SharedFuncitons::CheckIfReachMaxWinMoney(totalWin))
 	{
 		SharedFuncitons::DisplayYouCantPlay();
 		return static_cast<int>(Instruction::Exit);
@@ -42,7 +44,7 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 				amountOfMoney = SharedFuncitons::AskAmountMoney(aWalletMoney);
 
 			}
-			SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyTicTac);
+			SharedFuncitons::ShowAmountOfWin(totalWin);
 
 			std::cout << "First Player Name: ";
 			std::cin >> playerName;
@@ -91,8 +93,8 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 						if (firstPlayer)
 						{
 							SharedFuncitons::MoneyMath(aWalletMoney, -amountOfMoney);
-							SharedFuncitons::SubtractFromWinMoney(globalTotalWinMoneyTicTac, amountOfMoney);
-							SharedFuncitons::StoreWinOrLose(lose);
+							SharedFuncitons::SubtractFromWinMoney(totalWin, amountOfMoney);
+							SharedFuncitons::StoreWinOrLose(lose, aHistoryOfWinOrLose);
 
 
 							std::cout << "the comp have Won!" << std::endl;
@@ -101,8 +103,8 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 						else
 						{
 							SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 3);
-							globalTotalWinMoneyTicTac += amountOfMoney * 3;
-							SharedFuncitons::StoreWinOrLose(win);
+							totalWin += amountOfMoney * 3;
+							SharedFuncitons::StoreWinOrLose(win, aHistoryOfWinOrLose);
 
 
 
@@ -117,7 +119,7 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 					}
 				}
 
-				if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyTicTac) || aWalletMoney == static_cast<int>(Instruction::Empty))
+				if (SharedFuncitons::CheckIfReachMaxWinMoney(totalWin) || aWalletMoney == static_cast<int>(Instruction::Empty))
 				{
 					SharedFuncitons::DisplayYouCantPlay();
 					wantToPlay = false;
@@ -150,7 +152,7 @@ int TicTacToe::PlayTicTacToe(int& aWalletMoney)
 				}
 			}
 
-			TicTacShowMenu();
+			TicTacShowMenu(totalWin, aHistoryOfWinOrLose);
 			index = AskForInputMenu();
 			if (index == 0)
 			{
@@ -516,14 +518,14 @@ bool TicTacToe::CheckCurvedLineWin(const int *aUsedSpace)
 	return isWin;
 }
 
-void TicTacToe::TicTacShowMenu()
+void TicTacToe::TicTacShowMenu(const int &aTotalWin, int* aHistoryOfWinOrLose)
 {
 	system("cls");
 	std::cout << "================================" << std::endl;
 	std::cout << "Welcome to the Tic Tac Toe Game!" << std::endl;
 	std::cout << "================================" << std::endl;
-	SharedFuncitons::DisplayWinLose();
-	SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyTicTac);
+	SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);
+	SharedFuncitons::ShowAmountOfWin(aTotalWin);
 	std::cout << "1. Play New Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 }

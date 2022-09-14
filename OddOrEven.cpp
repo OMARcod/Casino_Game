@@ -1,6 +1,6 @@
 #include "OddOrEven.h"
 
-int OddOrEven::Play(int& aWalletMoney)
+int OddOrEven::Play(int& aWalletMoney,int &aTotalWin,int *aHistoryOfWinAndLose)
 {
 	std::uniform_int_distribution<int> rndDist(1, 6);
 
@@ -41,7 +41,7 @@ int OddOrEven::Play(int& aWalletMoney)
 			amountOfMoney = SharedFuncitons::AskAmountMoney(aWalletMoney);
 
 		}
-		SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyOddEven);
+		SharedFuncitons::ShowAmountOfWin(aTotalWin);
 		std::cout << "I have thrown 2 dices!  ";
 		std::cout << "What do want to chose? odd or even" << std::endl;
 		std::cout << std::endl;
@@ -62,9 +62,9 @@ int OddOrEven::Play(int& aWalletMoney)
 				system("cls");
 
 				SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 3);
-				globalTotalWinMoneyOddEven += amountOfMoney * 3;
+				aTotalWin += amountOfMoney * 3;
 
-				if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
+				if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 				{
 					SharedFuncitons::DisplayYouCantPlay();
 					isPlaying = false;
@@ -76,7 +76,7 @@ int OddOrEven::Play(int& aWalletMoney)
 
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					SharedFuncitons::StoreWinOrLose(win);
+					SharedFuncitons::StoreWinOrLose(win, aHistoryOfWinAndLose);
 
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
 
@@ -97,9 +97,9 @@ int OddOrEven::Play(int& aWalletMoney)
 
 
 				SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 3);
-				globalTotalWinMoneyOddEven += amountOfMoney * 3;
+				aTotalWin += amountOfMoney * 3;
 
-				if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
+				if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 				{
 					SharedFuncitons::DisplayYouCantPlay();
 					isPlaying = false;
@@ -112,7 +112,7 @@ int OddOrEven::Play(int& aWalletMoney)
 
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					SharedFuncitons::StoreWinOrLose(win);
+					SharedFuncitons::StoreWinOrLose(win, aHistoryOfWinAndLose);
 
 
 
@@ -135,7 +135,7 @@ int OddOrEven::Play(int& aWalletMoney)
 				system("cls");
 
 				SharedFuncitons::MoneyMath(aWalletMoney, -amountOfMoney);
-				SharedFuncitons::SubtractFromWinMoney(globalTotalWinMoneyOddEven, amountOfMoney);
+				SharedFuncitons::SubtractFromWinMoney(aTotalWin, amountOfMoney);
 
 
 				wrongGuess = false;
@@ -150,7 +150,7 @@ int OddOrEven::Play(int& aWalletMoney)
 					std::cout << "dice1:  " << tempDice1 << "  ||   dice2: " << tempDice2 << std::endl;
 					std::cout << "you have lost!" << std::endl;
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
-					SharedFuncitons::StoreWinOrLose(lose);
+					SharedFuncitons::StoreWinOrLose(lose, aHistoryOfWinAndLose);
 
 
 					if (SharedFuncitons::ReadInputChar() == 'n')
@@ -173,10 +173,13 @@ int OddOrEven::Play(int& aWalletMoney)
 	return static_cast<int>(Instruction::Exit);
 }
 
-int OddOrEven::Menu(int& aWalletMoney)
+int OddOrEven::Menu(int& aWalletMoney, int* aHistoryOfWinAndLose)
 {
 	bool isPlaying = true;
 	int inputNr = 0;
+
+	static int totalWin = 0;
+
 
 	while (isPlaying && aWalletMoney != 0)
 	{
@@ -186,8 +189,8 @@ int OddOrEven::Menu(int& aWalletMoney)
 		std::cout << "1. Play" << std::endl;
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
-		SharedFuncitons::DisplayWinLose();
-		SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyOddEven);
+		SharedFuncitons::DisplayWinLose(aHistoryOfWinAndLose);
+		SharedFuncitons::ShowAmountOfWin(totalWin);
 
 
 		inputNr = SharedFuncitons::ReadInputInteger();
@@ -195,14 +198,14 @@ int OddOrEven::Menu(int& aWalletMoney)
 		switch (inputNr)
 		{
 		case 1:
-			if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyOddEven))
+			if (SharedFuncitons::CheckIfReachMaxWinMoney(totalWin))
 			{
 				SharedFuncitons::DisplayYouCantPlay();
 			}
 			else
 			{
 				system("cls");
-				Play(aWalletMoney);
+				Play(aWalletMoney, totalWin, aHistoryOfWinAndLose);
 			}
 			break;
 

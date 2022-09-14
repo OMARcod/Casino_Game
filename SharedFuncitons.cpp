@@ -87,7 +87,7 @@ void SharedFuncitons::MoneyMath(int& aWalletMoney, int someAmountOfMoney)
 	aWalletMoney += someAmountOfMoney;
 	ShowMoneyLeft(aWalletMoney);
 }
-void SharedFuncitons::StoreWinOrLose(bool isWin)
+void SharedFuncitons::StoreWinOrLose(bool isWin, int  *aHistoryOfWinOrLose)
 {
 	bool ok = true;
 	while (ok)
@@ -96,9 +96,9 @@ void SharedFuncitons::StoreWinOrLose(bool isWin)
 		{
 			for (int i = 0; i < globalArraySize; i++)
 			{
-				if (CheckIfEmptyAt(globalHistoryOfWinAndLose[i]))
+				if (CheckIfEmptyAt(aHistoryOfWinOrLose[i]))
 				{
-					globalHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Win);
+					aHistoryOfWinOrLose[i] = static_cast<int>(Instruction::Win);
 					return;
 				}
 			}
@@ -107,9 +107,9 @@ void SharedFuncitons::StoreWinOrLose(bool isWin)
 		{
 			for (int i = 0; i < globalArraySize; i++)
 			{
-				if (CheckIfEmptyAt(globalHistoryOfWinAndLose[i]))
+				if (CheckIfEmptyAt(aHistoryOfWinOrLose[i]))
 				{
-					globalHistoryOfWinAndLose[i] = static_cast<int>(Instruction::Lose);
+					aHistoryOfWinOrLose[i] = static_cast<int>(Instruction::Lose);
 					return;
 				}
 			}
@@ -117,27 +117,28 @@ void SharedFuncitons::StoreWinOrLose(bool isWin)
 		int temp = 0;
 		for (int i = globalArraySize - 1; i > 0; i--)
 		{
-			temp = globalHistoryOfWinAndLose[i - 1];
-			globalHistoryOfWinAndLose[i - 1] = globalHistoryOfWinAndLose[i];
-			globalHistoryOfWinAndLose[i] = temp;
+			temp = aHistoryOfWinOrLose[i - 1];
+			aHistoryOfWinOrLose[i - 1] = aHistoryOfWinOrLose[i];
+			aHistoryOfWinOrLose[i] = temp;
 		}
-		globalHistoryOfWinAndLose[0] = static_cast<int>(Instruction::Empty);
+		aHistoryOfWinOrLose[0] = static_cast<int>(Instruction::Empty);
 	}
 }
-bool SharedFuncitons::CheckIfReachMaxWinMoney(int aMaxWinMoney)
+bool SharedFuncitons::CheckIfReachMaxWinMoney(const int aMaxWinMoney)
 {
-	bool isReached = aMaxWinMoney >= globalMaxMoney;
+	int const MaxMoney = 5000;
+	bool isReached = aMaxWinMoney >= MaxMoney;
 	return isReached;
 }
-void SharedFuncitons::SubtractFromWinMoney(int aWinMoney, const int& anAmountToSubtract)
+void SharedFuncitons::SubtractFromWinMoney(int &aWinMoney, const int& anAmountToSubtract)
 {
 	if (aWinMoney > anAmountToSubtract)
 	{
-		globalTotalWinMoneyGuess -= anAmountToSubtract;
+		aWinMoney -= anAmountToSubtract;
 	}
 	else
 	{
-		globalTotalWinMoneyGuess = 0;
+		aWinMoney = 0;
 	}
 }
 void SharedFuncitons::ShowAmountOfWin(const int& aWinMoney)
@@ -146,15 +147,15 @@ void SharedFuncitons::ShowAmountOfWin(const int& aWinMoney)
 	std::cout << "amount of win " << aWinMoney << "$" << std::endl;
 	std::cout << "=====================================" << std::endl;
 }
-void SharedFuncitons::DisplayWinLose()
+void SharedFuncitons::DisplayWinLose(const int* aHistoryOfWinOrLose)
 {
 	for (int i = 0; i < globalArraySize; i++)
 	{
-		if (globalHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Win))
+		if (aHistoryOfWinOrLose[i] == static_cast<int>(Instruction::Win))
 		{
 			std::cout << i + 1 << ": win ";
 		}
-		else if (globalHistoryOfWinAndLose[i] == static_cast<int>(Instruction::Lose))
+		else if (aHistoryOfWinOrLose[i] == static_cast<int>(Instruction::Lose))
 		{
 			std::cout << i + 1 << ": lose ";
 		}

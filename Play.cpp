@@ -6,7 +6,15 @@ void Play::Play(int& aWalletMoney)
 	int inputNr = 0;
 	bool isPlaying = true;
 	int choiceOne = 1, choiceTwo = 2, choiceThree = 3, choiceZero = 0;
-	inputNr = MainMenu(aWalletMoney);
+
+
+	//New
+	static int historyOfWinAndLose[globalArraySize] = { 0 };
+
+
+
+
+	inputNr = MainMenu(aWalletMoney, historyOfWinAndLose);
 
 	while (isPlaying && aWalletMoney != 0)
 	{
@@ -14,16 +22,16 @@ void Play::Play(int& aWalletMoney)
 		{
 		case 1:
 			system("cls");
-			inputNr = GuessGame::Menu(aWalletMoney);
+			inputNr = GuessGame::Menu(aWalletMoney, historyOfWinAndLose);
 			break;
 		case 2:
 			system("cls");
-			inputNr = OddOrEven::Menu(aWalletMoney);
+			inputNr = OddOrEven::Menu(aWalletMoney, historyOfWinAndLose);
 			break;
 		case 3:
 			system("cls");
 			SharedFuncitons::GamesRules();
-			inputNr = TicTacToe::PlayTicTacToe(aWalletMoney);
+			inputNr = TicTacToe::Play(aWalletMoney, historyOfWinAndLose);
 			break;
 		case 4:
 			system("cls");
@@ -35,7 +43,7 @@ void Play::Play(int& aWalletMoney)
 			break;
 
 		case 5:
-			inputNr = MainMenu(aWalletMoney);
+			inputNr = MainMenu(aWalletMoney, historyOfWinAndLose);
 
 			break;
 		default:
@@ -55,7 +63,7 @@ void Play::Play(int& aWalletMoney)
 	}
 }
 
-int Play::MainMenu(int aWalletMoney)
+int Play::MainMenu(int aWalletMoney,const int *aHistoryOfWinOrLose)
 {
 
 	system("cls");
@@ -68,7 +76,7 @@ int Play::MainMenu(int aWalletMoney)
 	std::cout << "4. Read the rules" << std::endl;
 	std::cout << "0. Exit!" << std::endl;
 	SharedFuncitons::ShowMoneyLeft(aWalletMoney);
-	SharedFuncitons::DisplayWinLose();
+	SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);
 
 
 	int inputNr = SharedFuncitons::ReadInputInteger();

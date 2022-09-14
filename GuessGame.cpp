@@ -2,13 +2,12 @@
 
 
 
-int GuessGame::Play(int& aWalletMoney)
+int GuessGame::Play(int& aWalletMoney,int& aTotalWin,int *aHistoryOfWinOrLose)
 {
 	std::uniform_int_distribution<int> rndDist(1, 6);
 
 	int const nrOfTryAllowed = 3;
 	int const maxSum = 12;
-
 
 	int dice1 = 0;
 	int dice2 = 0;
@@ -41,7 +40,7 @@ int GuessGame::Play(int& aWalletMoney)
 		{
 			amountOfMoney = SharedFuncitons::AskAmountMoney(aWalletMoney);
 		}
-		SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyGuess);
+		SharedFuncitons::ShowAmountOfWin(aTotalWin);
 		std::cout << "guess the sum of the two dices ?" << std::endl;
 
 		std::cout << "Your Input: ";
@@ -70,7 +69,7 @@ int GuessGame::Play(int& aWalletMoney)
 
 					SharedFuncitons::MoneyMath(aWalletMoney, -amountOfMoney);
 
-					SharedFuncitons::SubtractFromWinMoney(globalTotalWinMoneyGuess, amountOfMoney);
+					SharedFuncitons::SubtractFromWinMoney(aTotalWin, amountOfMoney);
 
 					wrongGuess = false;
 
@@ -82,9 +81,9 @@ int GuessGame::Play(int& aWalletMoney)
 					else
 					{
 						std::cout << "you have lost!\t\tThe Number was: "<< sumOfDices << std::endl;
-						SharedFuncitons::StoreWinOrLose(lose);
+						SharedFuncitons::StoreWinOrLose(lose, aHistoryOfWinOrLose);
 
-						if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
+						if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 						{
 							SharedFuncitons::DisplayYouCantPlay();
 							isPlaying = false;
@@ -138,12 +137,12 @@ int GuessGame::Play(int& aWalletMoney)
 					std::cout << "==================" << std::endl;
 					std::cout << "congratulatiions you guessed right" << std::endl;
 					wrongGuess = false;
-					SharedFuncitons::StoreWinOrLose(win);
+					SharedFuncitons::StoreWinOrLose(win, aHistoryOfWinOrLose);
 
 					SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 2);
-					globalTotalWinMoneyGuess += amountOfMoney * 2;
+					aTotalWin += amountOfMoney * 2;
 
-					if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
+					if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 					{
 						SharedFuncitons::DisplayYouCantPlay();
 						isPlaying = false;
@@ -173,10 +172,12 @@ int GuessGame::Play(int& aWalletMoney)
 	return 0;
 }
 
-int GuessGame::Menu(int& aWalletMoney)
+int GuessGame::Menu(int& aWalletMoney,int *aHistoryOfWinOrLose)
 {
 	bool isPlaying = true;
 	int inputNr = 0;
+	static int totalWin = 0;
+
 
 	while (isPlaying && aWalletMoney != 0)
 	{
@@ -187,22 +188,22 @@ int GuessGame::Menu(int& aWalletMoney)
 		std::cout << "2. Read the rules" << std::endl;
 		std::cout << "0. Exit!" << std::endl;
 		std::cout << "==================" << std::endl;
-		SharedFuncitons::DisplayWinLose();
-		SharedFuncitons::ShowAmountOfWin(globalTotalWinMoneyGuess);
+		SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);
+		SharedFuncitons::ShowAmountOfWin(totalWin);
 
 		inputNr = SharedFuncitons::ReadInputInteger();
 
 		switch (inputNr)
 		{
 		case 1:
-			if (SharedFuncitons::CheckIfReachMaxWinMoney(globalTotalWinMoneyGuess))
+			if (SharedFuncitons::CheckIfReachMaxWinMoney(totalWin))
 			{
 				SharedFuncitons::DisplayYouCantPlay();
 			}
 			else
 			{
 				system("cls");
-				Play(aWalletMoney);
+				Play(aWalletMoney, totalWin, aHistoryOfWinOrLose);
 			}
 			break;
 

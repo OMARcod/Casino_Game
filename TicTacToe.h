@@ -13,7 +13,7 @@ namespace TicTacToe
 		BoxSize = 3,
 	};
 
-	int PlayTicTacToe(int& aWalletMoney);
+	int Play(int& aWalletMoney, int* aHistoryOfWinOrLose);
 	void ResetTheGame(char anArray[][3],int *aUsedSpace);
 	int AskForInputGame(const std::string& aPlayerName);
 	int RandomNumber(int aMin, int aMax);
@@ -30,6 +30,6 @@ namespace TicTacToe
 	bool CheckVerticalWin(const int* aUsedSpace);
 	bool CheckThisRow(int aStartIndex, int aPlayer, int aNrToAdd, const  int *aUsedSpace);
 	bool CheckCurvedLineWin(const int* aUsedSpace);
-	void TicTacShowMenu();
+	void TicTacShowMenu(const int& aTotalWin, int* aHistoryOfWinOrLose);
 };
 

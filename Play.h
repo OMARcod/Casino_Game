@@ -8,7 +8,7 @@
 
 namespace Play
 {
-	int MainMenu(int aWalletMoney);
+	int MainMenu(int aWalletMoney,const int *aHistoryOfWinOrLose);
 	void Play(int& aWalletMoney);
 };
 
