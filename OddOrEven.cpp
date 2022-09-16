@@ -1,4 +1,5 @@
 #include "OddOrEven.h"
+#include "SharedFuncitons.h"
 
 int OddOrEven::Play(int& aWalletMoney,int &aTotalWin,int *aHistoryOfWinAndLose)
 {

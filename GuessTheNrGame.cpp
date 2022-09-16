@@ -1,4 +1,5 @@
 #include "GuessTheNrGame.h"
+#include "SharedFuncitons.h"
 
 int GuessTheNrGame::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 {

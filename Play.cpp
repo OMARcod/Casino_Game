@@ -1,5 +1,5 @@
 #include "Play.h"
-
+#include "SharedFuncitons.h"
 void Play::Play(int& aWalletMoney)
 {
 	
@@ -36,13 +36,18 @@ void Play::Play(int& aWalletMoney)
 		case 5:
 			system("cls");
 			SharedFuncitons::GamesRules();
+			inputNr = Roulette::Menu(aWalletMoney, historyOfWinAndLose);
+			break;
+		case 6:
+			system("cls");
+			SharedFuncitons::GamesRules();
 			inputNr = SharedFuncitons::CheckExit();
 			break;
 		case 0:
 			isPlaying = false;
 			break;
 
-		case 6:
+		case 7:
 			inputNr = MainMenu(aWalletMoney, historyOfWinAndLose);
 
 			break;
@@ -74,7 +79,8 @@ int Play::MainMenu(int aWalletMoney,const int *aHistoryOfWinOrLose)
 	std::cout << "2. Play: odd and even numbers" << std::endl;
 	std::cout << "3. Play TicTacToe" << std::endl;
 	std::cout << "4. Play Guess between 1 and 100" << std::endl;
-	std::cout << "5. Read the rules" << std::endl;
+	std::cout << "5. Play Roulette Game" << std::endl;
+	std::cout << "6. Read the rules" << std::endl;
 	std::cout << "0. Exit!" << std::endl;
 	SharedFuncitons::ShowMoneyLeft(aWalletMoney);
 	SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);

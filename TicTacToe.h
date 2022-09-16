@@ -1,7 +1,5 @@
 #pragma once
-#include"SharedFuncitons.h"
 #include<iostream>
-
 namespace TicTacToe
 {
 	static int const globalArraySize = 9;

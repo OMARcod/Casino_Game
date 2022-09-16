@@ -9,7 +9,7 @@ static const int globalArraySize = 5;
 
 enum class Instruction
 {
-	Exit = 6,
+	Exit = 7,
 	Win = 1,
 	Lose = 2,
 	Empty = 0,

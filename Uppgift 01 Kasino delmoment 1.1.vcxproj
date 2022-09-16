@@ -132,6 +132,7 @@
     <ClCompile Include="GuessTheNrGame.cpp" />
     <ClCompile Include="OddOrEven.cpp" />
     <ClCompile Include="Play.cpp" />
+    <ClCompile Include="Roulette.cpp" />
     <ClCompile Include="SharedFuncitons.cpp" />
     <ClCompile Include="TicTacToe.cpp" />
     <ClCompile Include="Main.cpp">
@@ -143,6 +144,7 @@
     <ClInclude Include="GuessTheNrGame.h" />
     <ClInclude Include="OddOrEven.h" />
     <ClInclude Include="Play.h" />
+    <ClInclude Include="Roulette.h" />
     <ClInclude Include="SharedFuncitons.h" />
     <ClInclude Include="TicTacToe.h" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "GuessGame.h"
+#include "SharedFuncitons.h"
 
 
 

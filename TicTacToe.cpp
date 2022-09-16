@@ -1,4 +1,5 @@
 #include "TicTacToe.h"
+#include"SharedFuncitons.h"
 
 int TicTacToe::Play(int& aWalletMoney, int* aHistoryOfWinOrLose)
 {
