@@ -35,7 +35,7 @@ void Play::Play(int& aWalletMoney)
 			break;
 		case 5:
 			system("cls");
-			SharedFuncitons::GamesRules();
+			SharedFuncitons::GamesRules(); //new
 			inputNr = Roulette::Menu(aWalletMoney, historyOfWinAndLose);
 			break;
 		case 6:
