@@ -16,7 +16,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 	bool lose = false;
 	int choseNr = 0;
 	int amountOfMoney = 0;
-	int odd = 1;
+	//int odd = 1;
 	int even = 0;
 
 	bool isWin = false;
@@ -163,7 +163,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 	}
 
 
-	//return static_cast<int>(Instruction::Exit);
+	return static_cast<int>(Instruction::Exit);
 }
 
 int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
@@ -294,4 +294,10 @@ int Roulette::ChoseMenu()
 //	.. number (n, n+3) the lowest number should not be comomn 3 and largets from 2
 //	.. number (n, n+3) the lowest not colomn 1 and largest colomn 3
 // same thing with (n, n+1)
+// 
+// 
 	//Red/Black
+//
+//
+// 
+//
