@@ -3,28 +3,30 @@
 
 int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 {
+	int const maxNr = 36;
 
-	int const maxNr = 10;
-
-	std::uniform_int_distribution<int> rndDist(1, maxNr);
+	std::uniform_int_distribution<int> rndDist(0, maxNr);
 
 	int randomNr = 0;
-	int inputNr = 0;
-	bool wrongGuess = true;
 	bool isPlaying = true;
-	bool win = true;
-	bool lose = false;
-	int choseNr = 0;
 	int amountOfMoney = 0;
-	//int odd = 1;
 	int even = 0;
 
 	bool isWin = false;
 
+	int const arraySize = 12;
+	int column1[12] = { 0 };
+	int column2[12] = { 0 };
+	int column3[12] = { 0 };
+	InistArray(column1, column2, column3, arraySize);
+	DrawRoulette(column1, column2, column3, arraySize);
+
+
+
 
 	while (isPlaying)
 	{
-		choseNr = ChoseMenu();
+		int choseNr = ChoseMenu();
 		if (choseNr != static_cast<int>(Instruction::Exit))
 		{
 			system("cls");
@@ -35,36 +37,12 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			}
 
 			randomNr = rndDist(rndEngine);
+
 			if (choseNr == 1)
 			{
-				wrongGuess = true;
-				std::cout << "guess the random nr between (1 and 10) ?" << std::endl;
-				std::cout << "Your Input: ";
-				while (wrongGuess)
-				{
-					inputNr = SharedFuncitons::ReadInputInteger();
-					if (inputNr > maxNr)
-					{
-						std::cout << "The number can't be bigger than " << maxNr << std::endl;
-						std::cout << "Your Input: ";
-
-					}
-					else if (inputNr < static_cast<int>(Instruction::Empty))
-					{
-						std::cout << "The number can't be lower than " << static_cast<int>(Instruction::Empty) << std::endl;
-						std::cout << "Your Input: ";
-					}
-					else if (randomNr != inputNr)
-					{
-						wrongGuess = false;
-						isWin = false;
-					}
-					else
-					{
-						wrongGuess = false;
-						isWin = true;
-					}
-				}
+				system("cls");
+				DrawRoulette(column1, column2, column3, arraySize);
+				isWin = Straigth(randomNr);
 			}
 			else if (choseNr == 2)
 			{
@@ -85,6 +63,18 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 
 				}
 				isWin = false;
+			}
+			else if (choseNr == 4)
+			{
+				system("cls");
+				DrawRoulette(column1, column2, column3, arraySize);
+				isWin = ColumnBet(randomNr, column1, column2, column3, arraySize);
+			}
+			else if (choseNr == 5)
+			{
+				system("cls");
+				DrawRoulette(column1, column2, column3, arraySize);
+				isWin = Corner(randomNr, column1, column2, column3, arraySize);
 			}
 		}
 		else
@@ -107,7 +97,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			else
 			{
 				std::cout << "you have lost!\t\tThe Number was: " << randomNr << std::endl;
-				SharedFuncitons::StoreWinOrLose(lose, aHistoryOfWinOrLose);
+				SharedFuncitons::StoreWinOrLose(isWin, aHistoryOfWinOrLose);
 				if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 				{
 					SharedFuncitons::DisplayYouCantPlay();
@@ -134,7 +124,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			system("cls");
 			std::cout << "==================" << std::endl;
 			std::cout << "congratulatiions you guessed right\t\tThe Number was: " << randomNr << std::endl;
-			SharedFuncitons::StoreWinOrLose(win, aHistoryOfWinOrLose);
+			SharedFuncitons::StoreWinOrLose(isWin, aHistoryOfWinOrLose);
 
 			SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 2);
 			aTotalWin += amountOfMoney * 2;
@@ -213,7 +203,7 @@ int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
 
 		case 5:
 			system("cls");
-			std::cout << "==== Guess Game ====" << std::endl;
+			std::cout << "==== Roulette Game ====" << std::endl;
 			std::cout << std::endl;
 			std::cout << "1. Play" << std::endl;
 			std::cout << "2. Read the rules" << std::endl;
@@ -241,9 +231,11 @@ int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
 int Roulette::ChoseMenu()
 {
 	std::cout << "======================OBS======================" << std::endl;
-	std::cout << "1. You can guess where the ball will land between (1 and 10)" << std::endl;
+	std::cout << "1. You can guess where the ball will land between (0 and 36)" << std::endl;
 	std::cout << "2. You guess if the ball will land on odd number" << std::endl;
 	std::cout << "3. You guess if the ball will land on even number" << std::endl;
+	std::cout << "4. Guess in wich collomn the ball will land" << std::endl;
+	std::cout << "5. Corner Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 	std::cout << "======================OBS======================\n" << std::endl;
 
@@ -262,6 +254,12 @@ int Roulette::ChoseMenu()
 		case 3:
 			return choseNr;
 			break;
+		case 4:
+			return choseNr;
+			break;
+		case 5:
+			return choseNr;
+			break;
 		case 0:
 			wrongInput = false;
 			break;
@@ -274,8 +272,299 @@ int Roulette::ChoseMenu()
 	return static_cast<int>(Instruction::Exit);
 }
 
+void Roulette::DrawRoulette(const int* aColumn1, const int* aColumn2, const  int* aColumn3, const int& aSize)
+{
 
-	//Column bet 
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << "---";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << aColumn1[i] << " ";
+	}
+	std::cout << std::endl;
+	//New
+
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << "---";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << aColumn2[i] << " ";
+	}
+	std::cout << std::endl;
+	//New
+
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << "---";
+	}
+	std::cout << std::endl;
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << aColumn3[i] << " ";
+	}
+	std::cout << std::endl;
+	//New
+	for (int i = 0; i < aSize; i++)
+	{
+		std::cout << "---";
+	}
+	std::cout << std::endl;
+
+
+}
+
+void Roulette::InistArray(int* aColumn1, int* aColumn2, int* aColumn3, const int& aSize)
+{
+	int nrToAdd = 3;
+
+	int elementNr = 3;
+	for (int i = 0; i < aSize; i++)
+	{
+		aColumn1[i] = elementNr;
+		elementNr += nrToAdd;
+	}
+	elementNr = 2;
+	for (int i = 0; i < aSize; i++)
+	{
+		aColumn2[i] = elementNr;
+		elementNr += nrToAdd;
+	}
+
+	elementNr = 1;
+	for (int i = 0; i < aSize; i++)
+	{
+		aColumn3[i] = elementNr;
+		elementNr += nrToAdd;
+	}
+}
+
+bool Roulette::Straigth(const int& aRandomNr)
+{
+	bool wrongGuess = true;
+	int maxNr = 36;
+	bool isWin = false;
+
+	std::cout << "guess the where the ball will land form 0 to 36?" << std::endl;
+	while (wrongGuess)
+	{
+		std::cout << "Your Input: ";
+		int inputNr = SharedFuncitons::ReadInputInteger();
+		if (inputNr > maxNr)
+		{
+			std::cout << "The number can't be bigger than " << maxNr << std::endl;
+
+		}
+		else if (inputNr < static_cast<int>(Instruction::Empty))
+		{
+			std::cout << "The number can't be lower than " << static_cast<int>(Instruction::Empty) << std::endl;
+		}
+		else if (aRandomNr != inputNr)
+		{
+			wrongGuess = false;
+			isWin = false;
+		}
+		else
+		{
+			wrongGuess = false;
+			isWin = true;
+		}
+	}
+	return isWin;
+}
+
+bool Roulette::ColumnBet(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aSize)
+{
+	bool wrongGuess = true;
+	int maxNr = 3;
+	int choise = 1;
+	bool isWin = false;
+
+	std::cout << "Which collomnt you want to chose" << std::endl;
+	std::cout << "chose between (1 or 2 or 3)" << std::endl;
+
+	while (wrongGuess)
+	{
+		std::cout << "Your Input: ";
+		int inputNr = SharedFuncitons::ReadInputInteger();
+		if (inputNr > maxNr || inputNr < choise)
+		{
+			std::cout << "Please chose between 1 or 2 or 3" << std::endl;
+		}
+		else
+		{
+			wrongGuess = false;
+		}
+		if (!wrongGuess && inputNr == 1)
+		{
+			for (int i = 0; i < aSize; i++)
+			{
+				if (aRandomNr == aColumn1[i])
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+		}
+		else if (!wrongGuess && inputNr == 2)
+		{
+			for (int i = 0; i < aSize; i++)
+			{
+				if (aRandomNr == aColumn2[i])
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+		}
+		else if (!wrongGuess)
+		{
+			for (int i = 0; i < aSize; i++)
+			{
+				if (aRandomNr == aColumn3[i])
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+		}
+	}
+	return isWin;
+}
+
+bool Roulette::Corner(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aSize)
+{
+	bool wrongInput = true;
+	int maxNr = 36;
+	int choise = 1;
+	bool isWin = false;
+	const int arraySize = 4;
+	int inputNr[arraySize];
+
+	std::cout << "Type the four numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
+
+	while (wrongInput)
+	{
+		wrongInput = false;
+
+		std::cout << "Nr 1: ";
+		inputNr[0] = SharedFuncitons::ReadInputInteger();
+		std::cout << "Nr 2: ";
+		inputNr[1] = SharedFuncitons::ReadInputInteger();
+		std::cout << "Nr 3: ";
+		inputNr[2] = SharedFuncitons::ReadInputInteger();
+		std::cout << "Nr 4: ";
+		inputNr[3] = SharedFuncitons::ReadInputInteger();
+
+		int temp = 0;
+
+		BubbleSort(inputNr, arraySize);
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << "------";
+		}
+		std::cout << std::endl;
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << inputNr[i] << " ";
+		}
+		std::cout << std::endl;
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << "------";
+		}
+		std::cout << std::endl;
+
+		for (int i = 0; i < aSize; i++)
+		{
+			if (inputNr[0] == aColumn1[i] || inputNr[0] == aColumn3[i])
+			{
+				for (size_t j = 0; j < aSize; j++)
+				{
+					if (inputNr[3] == aColumn3[j] || inputNr[0] == aColumn1[j])
+					{
+						wrongInput = true;
+						break;
+					}
+				}
+			}
+		}
+		if (!wrongInput)
+		{
+			if (inputNr[0] == inputNr[1] - 1)
+			{
+				if (inputNr[1] == inputNr[2] - 2)
+				{
+					if (inputNr[2] == inputNr[3] - 1)
+					{
+						wrongInput = false;
+					}
+					else
+					{
+						wrongInput = true;
+					}
+				}
+				else
+				{
+					wrongInput = true;
+				}
+			}
+			else
+			{
+				wrongInput = true;
+			}
+		}
+
+		if (!wrongInput)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				if (aRandomNr == inputNr[i])
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+			isWin = false;
+			return isWin;
+		}
+		if (wrongInput)
+		{
+			std::cout << "the order is not write pleace chose other numbers!" << std::endl;
+			system("pause");
+			system("cls");
+			DrawRoulette(aColumn1, aColumn2, aColumn3, aSize);
+		}
+	}
+	isWin = false;
+	return isWin;
+}
+
+void Roulette::BubbleSort(int* anArray, const int anArraySize)
+{
+	int temp = 0;
+	for (int i = 0; i < anArraySize; i++) {
+		for (int j = i + 1; j < anArraySize; j++)
+		{
+			if (anArray[j] < anArray[i]) {
+				temp = anArray[i];
+				anArray[i] = anArray[j];
+				anArray[j] = temp;
+			}
+		}
+	}
+}
+
+
+//Column bet 
 // ask which collomn 1 2 or 3 
 //check if the random nr = .. an array[12] begin with comomn++;
 
@@ -297,7 +586,7 @@ int Roulette::ChoseMenu()
 // 
 // 
 	//Red/Black
-//
+// 
 //
 // 
 // 
