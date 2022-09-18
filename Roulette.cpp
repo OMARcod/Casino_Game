@@ -3,25 +3,22 @@
 
 int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 {
-	int const maxNr = 36;
+	const int maxNr = 36;
 
 	std::uniform_int_distribution<int> rndDist(0, maxNr);
 
 	int randomNr = 0;
 	bool isPlaying = true;
 	int amountOfMoney = 0;
-	int even = 0;
 
 	bool isWin = false;
 
-	int const arrayColumnSize = 12;
+	const int arrayColumnSize = 12;
 	int column1[12] = { 0 };
 	int column2[12] = { 0 };
 	int column3[12] = { 0 };
 	InistArray(column1, column2, column3, arrayColumnSize);
 	DrawRoulette(column1, column2, column3, arrayColumnSize);
-
-
 
 
 	while (isPlaying)
@@ -38,60 +35,45 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 
 			randomNr = rndDist(rndEngine);
 
-			if (choseNr == 1)
+			switch (choseNr)
 			{
+			case static_cast<int>(Game::Straight):
 				system("cls");
 				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = Straigth(randomNr);
-			}
-			else if (choseNr == 2)
-			{
-				if (randomNr % 2 == even)
-				{
-					isWin = false;
-				}
-				else
-				{
-					isWin = true;
-				}
-			}
-			else if (choseNr == 3)
-			{
-				if (randomNr % 2 == even)
-				{
-					isWin = true;
-
-				}
-				isWin = false;
-			}
-			else if (choseNr == 4)
-			{
+				break;
+			case static_cast<int>(Game::OddEven):
+				system("cls");
+				DrawRoulette(column1, column2, column3, arrayColumnSize);
+				isWin = OddOrEven(randomNr);
+				break;
+			case  static_cast<int>(Game::Column):
 				system("cls");
 				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = ColumnBet(randomNr, column1, column2, column3, arrayColumnSize);
-			}
-			else if (choseNr == 5)
-			{
+				break;
+			case static_cast<int>(Game::Corner):
 				system("cls");
 				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = Corner(randomNr, column1, column2, column3, arrayColumnSize);
-			}
-			else if (choseNr == 6)
-			{
+				break;
+			case static_cast<int>(Game::Split):
 				system("cls");
 				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = Split(randomNr, column1, column2, column3, arrayColumnSize);
-			}
-			else if (choseNr == 7)
-			{
+				break;
+			case static_cast<int>(Game::RedBlack):
 				system("cls");
 				isWin = RedBlack(randomNr);
+				break;
 			}
 		}
 		else
 		{
 			return static_cast<int>(Instruction::Exit);
 		}
+
+
 		if (!isWin)
 		{
 			system("cls");
@@ -100,7 +82,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 
 			SharedFuncitons::SubtractFromWinMoney(aTotalWin, amountOfMoney);
 
-			if (aWalletMoney == 0)
+			if (aWalletMoney == static_cast<int>(Instruction::Empty))
 			{
 				isPlaying = false;
 				return static_cast<int>(Instruction::Exit);
@@ -163,7 +145,6 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 		}
 	}
 
-
 	return static_cast<int>(Instruction::Exit);
 }
 
@@ -211,17 +192,7 @@ int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
 		case 0:
 			isPlaying = false;
 			break;
-
-		case 5:
-			system("cls");
-			std::cout << "==== Roulette Game ====" << std::endl;
-			std::cout << std::endl;
-			std::cout << "1. Play" << std::endl;
-			std::cout << "2. Read the rules" << std::endl;
-			std::cout << "0. Exit!" << std::endl;
-			inputNr = SharedFuncitons::ReadInputInteger();
-			break;
-
+		
 		default:
 			bool wrongInput = true;
 			while (wrongInput)
@@ -243,12 +214,11 @@ int Roulette::ChoseMenu()
 {
 	std::cout << "======================OBS======================" << std::endl;
 	std::cout << "1. Straight Game" << std::endl;
-	std::cout << "2. You guess if the ball will land on odd number" << std::endl;
-	std::cout << "3. You guess if the ball will land on even number" << std::endl;
-	std::cout << "4. Column Bet" << std::endl;
-	std::cout << "5. Corner Game" << std::endl;
-	std::cout << "6. Split Game" << std::endl;
-	std::cout << "7. Red Or Black Game" << std::endl;
+	std::cout << "2. Odd or Even" << std::endl;
+	std::cout << "3. Column Bet" << std::endl;
+	std::cout << "4. Corner Game" << std::endl;
+	std::cout << "5. Split Game" << std::endl;
+	std::cout << "6. Red Or Black Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 	std::cout << "======================OBS======================\n" << std::endl;
 
@@ -258,25 +228,22 @@ int Roulette::ChoseMenu()
 	{
 		switch (choseNr)
 		{
-		case 1:
+		case static_cast<int>(Game::Straight):
 			return choseNr;
 			break;
-		case 2:
+		case static_cast<int>(Game::OddEven):
 			return choseNr;
 			break;
-		case 3:
+		case static_cast<int>(Game::Column):
 			return choseNr;
 			break;
-		case 4:
+		case static_cast<int>(Game::Corner):
 			return choseNr;
 			break;
-		case 5:
+		case static_cast<int>(Game::Split):
 			return choseNr;
 			break;
-		case 6:
-			return choseNr;
-			break;
-		case 7:
+		case static_cast<int>(Game::RedBlack):
 			return choseNr;
 			break;
 		case 0:
@@ -304,7 +271,6 @@ void Roulette::DrawRoulette(const int* aColumn1, const int* aColumn2, const  int
 		std::cout << aColumn1[i] << " ";
 	}
 	std::cout << std::endl;
-	//New
 
 	for (int i = 0; i < aSize; i++)
 	{
@@ -316,7 +282,6 @@ void Roulette::DrawRoulette(const int* aColumn1, const int* aColumn2, const  int
 		std::cout << aColumn2[i] << " ";
 	}
 	std::cout << std::endl;
-	//New
 
 	for (int i = 0; i < aSize; i++)
 	{
@@ -328,21 +293,19 @@ void Roulette::DrawRoulette(const int* aColumn1, const int* aColumn2, const  int
 		std::cout << aColumn3[i] << " ";
 	}
 	std::cout << std::endl;
-	//New
+
 	for (int i = 0; i < aSize; i++)
 	{
 		std::cout << "---";
 	}
 	std::cout << std::endl;
-
-
 }
 
 void Roulette::InistArray(int* aColumn1, int* aColumn2, int* aColumn3, const int& aSize)
 {
-	int nrToAdd = 3;
-
+	const int nrToAdd = 3;
 	int elementNr = 3;
+
 	for (int i = 0; i < aSize; i++)
 	{
 		aColumn1[i] = elementNr;
@@ -365,8 +328,8 @@ void Roulette::InistArray(int* aColumn1, int* aColumn2, int* aColumn3, const int
 
 bool Roulette::Straigth(const int& aRandomNr)
 {
+	const int maxNr = 36;
 	bool wrongGuess = true;
-	int maxNr = 36;
 	bool isWin = false;
 
 
@@ -400,9 +363,9 @@ bool Roulette::Straigth(const int& aRandomNr)
 
 bool Roulette::ColumnBet(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aSize)
 {
+	const int maxNr = 3;
+	const int minNr = 1;
 	bool wrongGuess = true;
-	int maxNr = 3;
-	int choise = 1;
 	bool isWin = false;
 
 	std::cout << "Guess in wich collomn the ball will land" << std::endl;
@@ -413,7 +376,7 @@ bool Roulette::ColumnBet(const int& aRandomNr, const int* aColumn1, const int* a
 	{
 		std::cout << "Your Input: ";
 		int inputNr = SharedFuncitons::ReadInputInteger();
-		if (inputNr > maxNr || inputNr < choise)
+		if (inputNr > maxNr || inputNr < minNr)
 		{
 			std::cout << "Please chose between 1 or 2 or 3" << std::endl;
 		}
@@ -461,8 +424,6 @@ bool Roulette::ColumnBet(const int& aRandomNr, const int* aColumn1, const int* a
 bool Roulette::Corner(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aSize)
 {
 	bool wrongInput = true;
-	int maxNr = 36;
-	int choise = 1;
 	bool isWin = false;
 	const int arraySize = 4;
 	int inputNr[arraySize];
@@ -482,7 +443,6 @@ bool Roulette::Corner(const int& aRandomNr, const int* aColumn1, const int* aCol
 		std::cout << "Nr 4: ";
 		inputNr[3] = SharedFuncitons::ReadInputInteger();
 
-		int temp = 0;
 
 		BubbleSort(inputNr, arraySize);
 
@@ -587,8 +547,6 @@ void Roulette::BubbleSort(int* anArray, const int anArraySize)
 bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aColumnSize)
 {
 	bool wrongInput = true;
-	int maxNr = 36;
-	int choise = 1;
 	bool isWin = false;
 	const int arraySize = 2;
 	int inputNr[arraySize];
@@ -603,7 +561,6 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 		inputNr[1] = SharedFuncitons::ReadInputInteger();
 
 
-		int temp = 0;
 
 		BubbleSort(inputNr, arraySize);
 
@@ -801,7 +758,6 @@ bool Roulette::OddOrEven(const int& aRandomNr)
 	const int even = 0;
 
 	
-	system("cls");
 	std::cout << "Guess if the ball will land on odd number or even number" << std::endl;
 	std::cout << "Odd Or Even?" << std::endl;
 	std::cout << "0. Even" << std::endl;
@@ -849,40 +805,3 @@ bool Roulette::OddOrEven(const int& aRandomNr)
 	return isWin;
 }
 
-
-//Column bet 
-// ask which collomn 1 2 or 3 
-//check if the random nr = .. an array[12] begin with comomn++;
-
-	//Corner 
-//ask for 4 input ... number should be (n,n+1,n+3,n+4) else is not valid 
-//to do so sort the array form min to max 
-//and applay that validation (n,n+1,n+3,n+4)
-
-	//Staright
-//ask for any number guess number ... between 0 and 36
-
-	//Split
-//ask for 2 input
-// sort the numbers
-//  .. number should be (n,n+1) or (n, n+3) 
-//	.. number (n, n+3) the lowest number should not be comomn 3 and largets from 2
-//	.. number (n, n+3) the lowest not colomn 1 and largest colomn 3
-// same thing with (n, n+1)
-//		the number 1 should not be from collomn 1 and 2 from 2 
-//		and 2 from 1 and 1 from 2
-// 
-
-
-	//Red/Black
-// //make an array for black numbers
-// //make an array for red numbers
-// 
-// //if choise == black
-// //se if the random nr == black 
-//
-// //if chois == red 
-// //se if thr random nr == red
-// 
-// 
-//
