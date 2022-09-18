@@ -428,7 +428,7 @@ bool Roulette::Corner(const int& aRandomNr, const int* aColumn1, const int* aCol
 	const int arraySize = 4;
 	int inputNr[arraySize];
 
-	std::cout << "Type the four numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
+	std::cout << "Type the four numbers where you think the ball will land!" << std::endl;
 
 	while (wrongInput)
 	{
@@ -551,7 +551,7 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 	const int arraySize = 2;
 	int inputNr[arraySize];
 
-	std::cout << "Type the two numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
+	std::cout << "Type the two numbers where you think the ball will land!" << std::endl;
 
 	while (wrongInput)
 	{
