@@ -14,12 +14,12 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 
 	bool isWin = false;
 
-	int const arraySize = 12;
+	int const arrayColumnSize = 12;
 	int column1[12] = { 0 };
 	int column2[12] = { 0 };
 	int column3[12] = { 0 };
-	InistArray(column1, column2, column3, arraySize);
-	DrawRoulette(column1, column2, column3, arraySize);
+	InistArray(column1, column2, column3, arrayColumnSize);
+	DrawRoulette(column1, column2, column3, arrayColumnSize);
 
 
 
@@ -41,7 +41,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			if (choseNr == 1)
 			{
 				system("cls");
-				DrawRoulette(column1, column2, column3, arraySize);
+				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = Straigth(randomNr);
 			}
 			else if (choseNr == 2)
@@ -67,14 +67,20 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			else if (choseNr == 4)
 			{
 				system("cls");
-				DrawRoulette(column1, column2, column3, arraySize);
-				isWin = ColumnBet(randomNr, column1, column2, column3, arraySize);
+				DrawRoulette(column1, column2, column3, arrayColumnSize);
+				isWin = ColumnBet(randomNr, column1, column2, column3, arrayColumnSize);
 			}
 			else if (choseNr == 5)
 			{
 				system("cls");
-				DrawRoulette(column1, column2, column3, arraySize);
-				isWin = Corner(randomNr, column1, column2, column3, arraySize);
+				DrawRoulette(column1, column2, column3, arrayColumnSize);
+				isWin = Corner(randomNr, column1, column2, column3, arrayColumnSize);
+			}
+			else if (choseNr == 6)
+			{
+				system("cls");
+				DrawRoulette(column1, column2, column3, arrayColumnSize);
+				isWin = Split(randomNr, column1, column2, column3, arrayColumnSize);
 			}
 		}
 		else
@@ -236,6 +242,7 @@ int Roulette::ChoseMenu()
 	std::cout << "3. You guess if the ball will land on even number" << std::endl;
 	std::cout << "4. Guess in wich collomn the ball will land" << std::endl;
 	std::cout << "5. Corner Game" << std::endl;
+	std::cout << "6. Split Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 	std::cout << "======================OBS======================\n" << std::endl;
 
@@ -258,6 +265,9 @@ int Roulette::ChoseMenu()
 			return choseNr;
 			break;
 		case 5:
+			return choseNr;
+			break;
+		case 6:
 			return choseNr;
 			break;
 		case 0:
@@ -563,6 +573,98 @@ void Roulette::BubbleSort(int* anArray, const int anArraySize)
 	}
 }
 
+bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColumn2, const int* aColumn3, const int& aColumnSize)
+{
+	bool wrongInput = true;
+	int maxNr = 36;
+	int choise = 1;
+	bool isWin = false;
+	const int arraySize = 2;
+	int inputNr[arraySize];
+
+	std::cout << "Type the four numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
+
+	while (wrongInput)
+	{
+		std::cout << "Nr 1: ";
+		inputNr[0] = SharedFuncitons::ReadInputInteger();
+		std::cout << "Nr 2: ";
+		inputNr[1] = SharedFuncitons::ReadInputInteger();
+
+
+		int temp = 0;
+
+		BubbleSort(inputNr, arraySize);
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << "------";
+		}
+		std::cout << std::endl;
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << inputNr[i] << " ";
+		}
+		std::cout << std::endl;
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			std::cout << "------";
+		}
+		std::cout << std::endl;
+
+
+
+		if (inputNr[0] == inputNr[1] - 1)
+		{
+			wrongInput = false;
+			for (int i = 0; i < aColumnSize; i++)
+			{
+				if (inputNr[0] == aColumn3[i])
+				{
+					if (inputNr[1] == aColumn1[i])
+					{
+						wrongInput = true;
+						break;
+					}
+				}
+			}
+		}
+		else if (inputNr[0] == inputNr[1] - 3)
+		{
+			wrongInput = false;
+		}
+		else
+		{
+			wrongInput = true;
+		}
+
+		if (!wrongInput)
+		{
+			for (int i = 0; i < arraySize; i++)
+			{
+				if (aRandomNr == inputNr[i])
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+			isWin = false;
+			return isWin;
+		}
+		if (wrongInput)
+		{
+			std::cout << "the order is not write pleace chose other numbers!" << std::endl;
+			system("pause");
+			system("cls");
+			DrawRoulette(aColumn1, aColumn2, aColumn3, aColumnSize);
+		}
+	}
+	isWin = false;
+	return isWin;
+}
+
 
 //Column bet 
 // ask which collomn 1 2 or 3 
@@ -583,7 +685,8 @@ void Roulette::BubbleSort(int* anArray, const int anArraySize)
 //	.. number (n, n+3) the lowest number should not be comomn 3 and largets from 2
 //	.. number (n, n+3) the lowest not colomn 1 and largest colomn 3
 // same thing with (n, n+1)
-// 
+//		the number 1 should not be from collomn 1 and 2 from 2 
+//		and 2 from 1 and 1 from 2
 // 
 	//Red/Black
 // 
