@@ -82,6 +82,11 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 				DrawRoulette(column1, column2, column3, arrayColumnSize);
 				isWin = Split(randomNr, column1, column2, column3, arrayColumnSize);
 			}
+			else if (choseNr == 7)
+			{
+				system("cls");
+				isWin = RedBlack(randomNr);
+			}
 		}
 		else
 		{
@@ -237,12 +242,13 @@ int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
 int Roulette::ChoseMenu()
 {
 	std::cout << "======================OBS======================" << std::endl;
-	std::cout << "1. You can guess where the ball will land between (0 and 36)" << std::endl;
+	std::cout << "1. Straight Game" << std::endl;
 	std::cout << "2. You guess if the ball will land on odd number" << std::endl;
 	std::cout << "3. You guess if the ball will land on even number" << std::endl;
-	std::cout << "4. Guess in wich collomn the ball will land" << std::endl;
+	std::cout << "4. Column Bet" << std::endl;
 	std::cout << "5. Corner Game" << std::endl;
 	std::cout << "6. Split Game" << std::endl;
+	std::cout << "7. Red Or Black Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 	std::cout << "======================OBS======================\n" << std::endl;
 
@@ -268,6 +274,9 @@ int Roulette::ChoseMenu()
 			return choseNr;
 			break;
 		case 6:
+			return choseNr;
+			break;
+		case 7:
 			return choseNr;
 			break;
 		case 0:
@@ -360,7 +369,8 @@ bool Roulette::Straigth(const int& aRandomNr)
 	int maxNr = 36;
 	bool isWin = false;
 
-	std::cout << "guess the where the ball will land form 0 to 36?" << std::endl;
+
+	std::cout << "guess where the ball will land between (0 and 36)?" << std::endl;
 	while (wrongGuess)
 	{
 		std::cout << "Your Input: ";
@@ -395,7 +405,8 @@ bool Roulette::ColumnBet(const int& aRandomNr, const int* aColumn1, const int* a
 	int choise = 1;
 	bool isWin = false;
 
-	std::cout << "Which collomnt you want to chose" << std::endl;
+	std::cout << "Guess in wich collomn the ball will land" << std::endl;
+	std::cout << "Which collomn you want to chose" << std::endl;
 	std::cout << "chose between (1 or 2 or 3)" << std::endl;
 
 	while (wrongGuess)
@@ -582,7 +593,7 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 	const int arraySize = 2;
 	int inputNr[arraySize];
 
-	std::cout << "Type the four numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
+	std::cout << "Type the two numbers where you think the ball will land!\t\t" << aRandomNr << std::endl;
 
 	while (wrongInput)
 	{
@@ -665,6 +676,179 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 	return isWin;
 }
 
+bool Roulette::RedBlack(const int& aRandomNr)
+{
+	
+
+	bool isWin = false;
+	int choise;
+	const int red = 0;
+	const int black = 1;
+	bool wrongInput = true;
+
+
+	const int arraySizeRedBlack = 18;
+	const int arraySizeRoullete = 36;
+
+	int redArray[arraySizeRedBlack];
+	int blackArray[arraySizeRedBlack];
+
+	int indexRed = 0;
+	int indexBlack = 0;
+	for (int i = 1; i < arraySizeRoullete + 1; i++)
+	{
+		if (i % 2 == 0)
+		{
+			redArray[indexRed] = i;
+			indexRed++;
+		}
+		else
+		{
+			blackArray[indexBlack] = i;
+			indexBlack++;
+		}
+	}
+
+
+
+
+	system("cls");
+	DrawRedBlackNumber(redArray, blackArray, arraySizeRedBlack);
+	std::cout << "Guess in which color the ball will land" << std::endl;
+	std::cout << "Red Or Black?" << std::endl;
+	std::cout << "0. Red" << std::endl;
+	std::cout << "1. Black" << std::endl;
+	std::cout << std::endl;
+
+	choise = SharedFuncitons::ReadInputInteger();
+
+
+	while (wrongInput)
+	{
+		if (choise >= red && choise <= black)
+		{
+			wrongInput = false;
+			if (choise == red)
+			{
+				for (int i = 0; i < arraySizeRedBlack; i++)
+				{
+					if (aRandomNr == redArray[i])
+					{
+						isWin = true;
+						return isWin;
+					}
+				}
+
+			}
+			else
+			{
+				for (int i = 0; i < arraySizeRedBlack; i++)
+				{
+					if (aRandomNr == blackArray[i])
+					{
+						isWin = true;
+						return isWin;
+					}
+				}
+			}
+			isWin = false;
+			return isWin;
+		}
+		else
+		{
+			system("cls");
+			DrawRedBlackNumber(redArray, blackArray, arraySizeRedBlack);
+			std::cout << "0. Red" << std::endl;
+			std::cout << "1. Black" << std::endl;
+			std::cout << "pleace chose 0 OR 1" << std::endl;
+			std::cout << std::endl;
+			choise = SharedFuncitons::ReadInputInteger();
+		}
+	}
+
+
+
+	return isWin;
+}
+
+void Roulette::DrawRedBlackNumber(const int* aRedArray, const int* aBlackArray, const int& aArraySize)
+{
+	std::cout << "Red Numbers: " << std::endl;
+	for (size_t i = 0; i < aArraySize; i++)
+	{
+		std::cout << aRedArray[i] << " ";
+	}
+
+	std::cout << std::endl;
+
+	std::cout << "Black Numbers: " << std::endl;
+	for (size_t i = 0; i < aArraySize; i++)
+	{
+		std::cout << aBlackArray[i] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << std::endl;
+
+
+}
+
+bool Roulette::OddOrEven(const int& aRandomNr)
+{
+	bool isWin = false;
+	bool wrongInput = true;
+	int choise;
+	const int odd = 1;
+	const int even = 0;
+
+	
+	system("cls");
+	std::cout << "Guess if the ball will land on odd number or even number" << std::endl;
+	std::cout << "Odd Or Even?" << std::endl;
+	std::cout << "0. Even" << std::endl;
+	std::cout << "1. Odd" << std::endl;
+	std::cout << std::endl;
+
+	choise = SharedFuncitons::ReadInputInteger();
+
+
+	while (wrongInput)
+	{
+		if (choise >= even && choise <= odd)
+		{
+			wrongInput = false;
+			if (choise == even)
+			{
+				if (aRandomNr % 2 == even)
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+			else
+			{
+				if (aRandomNr % 2 == odd)
+				{
+					isWin = true;
+					return isWin;
+				}
+			}
+			isWin = false;
+			return isWin;
+		}
+		else
+		{
+			system("cls");
+			std::cout << "Odd Or Even?" << std::endl;
+			std::cout << "0. Odd" << std::endl;
+			std::cout << "1. Even" << std::endl;
+			std::cout << "pleace chose 0 OR 1" << std::endl;
+			std::cout << std::endl;
+			choise = SharedFuncitons::ReadInputInteger();
+		}
+	}
+	return isWin;
+}
+
 
 //Column bet 
 // ask which collomn 1 2 or 3 
@@ -688,9 +872,17 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 //		the number 1 should not be from collomn 1 and 2 from 2 
 //		and 2 from 1 and 1 from 2
 // 
+
+
 	//Red/Black
+// //make an array for black numbers
+// //make an array for red numbers
 // 
+// //if choise == black
+// //se if the random nr == black 
 //
+// //if chois == red 
+// //se if thr random nr == red
 // 
 // 
 //
