@@ -27,11 +27,3 @@ namespace Roulette
 	};
 
 };
-
-
-//use Enumns 
-	//in Menu 
-	//in numbers
-//Delete all hard coded values .. and make constant values instade
-
-//

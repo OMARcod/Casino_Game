@@ -20,7 +20,6 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 	InistArray(column1, column2, column3, arrayColumnSize);
 	DrawRoulette(column1, column2, column3, arrayColumnSize);
 
-
 	while (isPlaying)
 	{
 		int choseNr = ChoseMenu();
@@ -77,7 +76,6 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 		if (!isWin)
 		{
 			system("cls");
-
 			SharedFuncitons::MoneyMath(aWalletMoney, -amountOfMoney);
 
 			SharedFuncitons::SubtractFromWinMoney(aTotalWin, amountOfMoney);
@@ -89,8 +87,12 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 			}
 			else
 			{
-				std::cout << "you have lost!\t\tThe Number was: " << randomNr << std::endl;
 				SharedFuncitons::StoreWinOrLose(isWin, aHistoryOfWinOrLose);
+				std::cout << "============" << std::endl;
+				SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);
+				std::cout << "============" << std::endl;
+
+				std::cout << "you have lost!\t\tThe Number was: " << randomNr << std::endl;
 				if (SharedFuncitons::CheckIfReachMaxWinMoney(aTotalWin))
 				{
 					SharedFuncitons::DisplayYouCantPlay();
@@ -115,9 +117,11 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 		if (isWin)
 		{
 			system("cls");
+			SharedFuncitons::StoreWinOrLose(isWin, aHistoryOfWinOrLose);
+			std::cout << "============" << std::endl;
+			SharedFuncitons::DisplayWinLose(aHistoryOfWinOrLose);
 			std::cout << "==================" << std::endl;
 			std::cout << "congratulatiions you guessed right\t\tThe Number was: " << randomNr << std::endl;
-			SharedFuncitons::StoreWinOrLose(isWin, aHistoryOfWinOrLose);
 
 			SharedFuncitons::MoneyMath(aWalletMoney, amountOfMoney * 2);
 			aTotalWin += amountOfMoney * 2;
@@ -589,13 +593,17 @@ bool Roulette::Split(const int& aRandomNr, const int* aColumn1, const int* aColu
 			wrongInput = false;
 			for (int i = 0; i < aColumnSize; i++)
 			{
-				if (inputNr[0] == aColumn3[i])
+				if (inputNr[0] == aColumn1[i])
 				{
-					if (inputNr[1] == aColumn1[i])
+					for (int j = 0; j < aColumnSize; j++)
 					{
-						wrongInput = true;
-						break;
+						if (inputNr[1] == aColumn3[j])
+						{
+							wrongInput = true;
+							break;
+						}
 					}
+					
 				}
 			}
 		}
@@ -804,4 +812,5 @@ bool Roulette::OddOrEven(const int& aRandomNr)
 	}
 	return isWin;
 }
+
 
