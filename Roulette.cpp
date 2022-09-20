@@ -18,11 +18,12 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 	int column2[12] = { 0 };
 	int column3[12] = { 0 };
 	InistArray(column1, column2, column3, arrayColumnSize);
-	DrawRoulette(column1, column2, column3, arrayColumnSize);
 
 	while (isPlaying)
 	{
-		int choseNr = ChoseMenu();
+		system("cls");
+		DrawRoulette(column1, column2, column3, arrayColumnSize);
+		int choseNr = ChoseMenu(aHistoryOfWinOrLose);
 		if (choseNr != static_cast<int>(Instruction::Exit))
 		{
 			system("cls");
@@ -104,8 +105,7 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 					std::cout << "Do you want to play one more time ? y/n" << std::endl;
 					if (SharedFuncitons::ReadInputChar() == 'n')
 					{
-						isPlaying = false;
-						return static_cast<int>(Instruction::Exit);
+						system("cls");
 					}
 					else
 					{
@@ -137,12 +137,10 @@ int Roulette::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOrLose)
 				std::cout << "Do you want to play one more time ? y/n" << std::endl;
 				if (SharedFuncitons::ReadInputChar() == 'n')
 				{
-					isPlaying = false;
-					return static_cast<int>(Instruction::Exit);
+					system("cls");
 				}
 				else
 				{
-
 					system("cls");
 				}
 			}
@@ -214,7 +212,7 @@ int Roulette::Menu(int& aWalletMoney, int* aHistoryOfWinOrLose)
 	return static_cast<int>(Instruction::Exit);
 }
 
-int Roulette::ChoseMenu()
+int Roulette::ChoseMenu(const int* aHistoryOfWinAndLose)
 {
 	std::cout << "======================OBS======================" << std::endl;
 	std::cout << "1. Straight Game" << std::endl;
@@ -225,6 +223,8 @@ int Roulette::ChoseMenu()
 	std::cout << "6. Red Or Black Game" << std::endl;
 	std::cout << "0. Exit" << std::endl;
 	std::cout << "======================OBS======================\n" << std::endl;
+	SharedFuncitons::DisplayWinLose(aHistoryOfWinAndLose);
+	std::cout << "=====================" << std::endl;
 
 	int choseNr = SharedFuncitons::ReadInputInteger();
 	bool wrongInput = true;
