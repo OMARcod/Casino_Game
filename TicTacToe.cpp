@@ -5,12 +5,12 @@ int TicTacToe::Play(int& aWalletMoney, int* aHistoryOfWinOrLose)
 {
 	int usedSpaces[globalArraySize]{ 0 };
 	char array2D[3][3];
-	int index = 0;
+	static int totalWin = 0;
 	bool lose = false;
 	bool win = true;
 
-	static int totalWin = 0;
 
+	int index = 0;
 	bool isPlaying = true;
 	bool firstPlayer = true;
 

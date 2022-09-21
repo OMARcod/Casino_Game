@@ -98,7 +98,6 @@ int GuessTheNrGame::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOr
 							}
 							else
 							{
-
 								nrOfTry = nrOfTryAllowed;
 								system("cls");
 							}
@@ -126,7 +125,6 @@ int GuessTheNrGame::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOr
 					{
 						std::cout << "==================" << std::endl;
 						std::cout << "greater" << "                          ||Try left:" << nrOfTry << std::endl;
-
 						std::cout << "Your Input: ";
 					}
 				}
@@ -157,7 +155,6 @@ int GuessTheNrGame::Play(int& aWalletMoney, int& aTotalWin, int* aHistoryOfWinOr
 						}
 						else
 						{
-
 							nrOfTry = nrOfTryAllowed;
 							system("cls");
 						}

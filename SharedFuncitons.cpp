@@ -87,7 +87,7 @@ void SharedFuncitons::MoneyMath(int& aWalletMoney, int someAmountOfMoney)
 	aWalletMoney += someAmountOfMoney;
 	ShowMoneyLeft(aWalletMoney);
 }
-void SharedFuncitons::StoreWinOrLose(bool isWin, int  *aHistoryOfWinOrLose)
+void SharedFuncitons::StoreWinOrLose(bool isWin, int* aHistoryOfWinOrLose)
 {
 	bool ok = true;
 	while (ok)
@@ -130,7 +130,7 @@ bool SharedFuncitons::CheckIfReachMaxWinMoney(const int aMaxWinMoney)
 	bool isReached = aMaxWinMoney >= MaxMoney;
 	return isReached;
 }
-void SharedFuncitons::SubtractFromWinMoney(int &aWinMoney, const int& anAmountToSubtract)
+void SharedFuncitons::SubtractFromWinMoney(int& aWinMoney, const int& anAmountToSubtract)
 {
 	if (aWinMoney > anAmountToSubtract)
 	{
