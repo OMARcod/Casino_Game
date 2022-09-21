@@ -11,8 +11,9 @@ namespace TicTacToe
 		BoxSize = 3,
 	};
 
-	//1
 	int Play(int& aWalletMoney, int* aHistoryOfWinOrLose);
+
+	//1
 	void ResetTheGame(char anArray[][3],int *aUsedSpace);
 	int AskForInputGame(const std::string& aPlayerName);
 	int RandomNumber(int aMin, int aMax);
@@ -28,8 +29,6 @@ namespace TicTacToe
 	bool CheckIfArrayIsFull(const int* aUsedSpace);
 	bool CheckIfWin(const int* aUsedSpace);
 	bool CheckHorisontalWin(const int* aUsedSpace);
-
-
 
 	//3
 	bool CheckVerticalWin(const int* aUsedSpace);

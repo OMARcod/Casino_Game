@@ -174,9 +174,9 @@ int GuessGame::Play(int& aWalletMoney,int& aTotalWin,int *aHistoryOfWinOrLose)
 
 int GuessGame::Menu(int& aWalletMoney,int *aHistoryOfWinOrLose)
 {
+	static int totalWin = 0;
 	bool isPlaying = true;
 	int inputNr = 0;
-	static int totalWin = 0;
 
 
 	while (isPlaying && aWalletMoney != 0)
